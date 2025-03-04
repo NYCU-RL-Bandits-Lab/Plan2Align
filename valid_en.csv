@@ -1,0 +1,466 @@
+id,seg,en,zh,zh_title,zh_url,llama3,gpt4o
+1,0,"The financial services industry is reaching an important milestone with AI, as organizations move beyond testing and experimentation to successful AI implementation, driving business results.
+NVIDIA’s fifth annual State of AI in Financial Services report shows how financial institutions have consolidated their AI efforts to focus on core applications, signaling a significant increase in AI capability and proficiency.
+AI Helps Drive Revenue and Save Costs Companies investing in AI are seeing tangible benefits, including increased revenue and cost savings.
+Nearly 70% of respondents report that AI has driven a revenue increase of 5% or more, with a dramatic rise in those seeing a 10-20% revenue boost. In addition, more than 60% of respondents say AI has helped reduce annual costs by 5% or more. Nearly a quarter of respondents are planning to use AI to create new business opportunities and revenue streams.
+The top generative AI use cases in terms of return on investment (ROI) are trading and portfolio optimization, which account for 25% of responses, followed by customer experience and engagement at 21%. These figures highlight the practical, measurable benefits of AI as it transforms key business areas and drives financial gains.
+Overcoming Barriers to AI Success Half of management respondents said they’ve deployed their first generative AI service or application, with an additional 28% planning to do so within the next six months. A 50% decline in the number of respondents reporting a lack of AI budget suggests increasing dedication to AI development and resource allocation.
+The challenges associated with early AI exploration are also diminishing. The survey revealed fewer companies reporting data issues and privacy concerns, as well as reduced concern over insufficient data for model training. These improvements reflect growing expertise and better data management practices within the industry.
+As financial services firms allocate budget and grow more savvy at data management, they can better position themselves to harness AI for enhanced operational efficiency, security and innovation across business functions.","金融服務業在使用人工智慧（AI）方面正邁入一個重要的里程碑，各大組織開始邁出測試與實驗的範疇，成功使用 AI 推動業務成果。
+NVIDIA 的第五份《金融服務業 AI 現況（State of AI in Financial Services）》年度調查報告顯示，金融機構已經整合自身在 AI 方面的各項作為，以專注在核心應用項目上，這標誌著 AI 能力與熟練程度大幅提升。
+AI 有助於增加營收與節省成本
+投資於 AI 的公司正在看到實質效益，包括增加營收和節省成本等。
+近七成的受訪者表示，AI 已經帶來 5% 或以上的營收成長，其中營收成長幅度達 10% 至 20% 的受訪者比例更是大幅增加。此外，超過六成的受訪者表示 AI 已協助減少 5% 或以上的年度成本。近四分之一的受訪者正計劃使用 AI 創造新的商機和收入來源。
+交易與投資組合最佳化是投資報酬率（ROI）最高的
+生成式 AI 使用案例，佔回應數量的 25%，其次是客戶體驗與參與度，佔 21%。這些數字突顯 AI在改變關鍵業務領域和推動財務收益時，所帶來可衡量的實際效益。
+克服 AI 成功的關卡
+半數管理層的受訪者表示，他們已經部署了第一個生成式 AI 服務或應用，另有 28% 的受訪者計劃在未來六個月內部署。回覆缺乏 AI 預算的受訪者人數減少了五成，這顯示對於 AI 開發與資源分配的投入程度日益增加。
+與早期探索 AI 相關的挑戰同樣在減少。調查顯示，回答有資料問題和隱私疑慮的公司數量減少，對於模型訓練資料不足的疑慮也降低。這些改善反映出業界的專業知識與資料管理實務正在不斷增加。
+隨著金融服務公司分配預算並更加擅長管理資料，他們可以更好地利用 AI 來提高跨業務單位的營運效率、安全性和進行創新。",AI 帶來亮眼報酬：調查結果揭示金融業最新技術趨勢,https://blogs.nvidia.com.tw/blog/ai-in-financial-services-survey-2025/,"The Financial Services industry is marking an important milestone in its adoption of Artificial Intelligence (AI), with major organizations taking their first steps in testing and experimenting with AI-driven business results.
+
+NVIDIA's fifth annual survey of the State of AI in Financial Services found that financial institutions have integrated AI across all functions, focusing on core applications, a sign that AI capabilities and expertise have increased dramatically.
+
+AI boosts revenue and saves costs
+
+Companies investing in AI are seeing tangible benefits, including increased revenue and cost savings.
+
+About 70% of respondents say AI has driven 5% or more revenue growth, while those seeing 10% to 20% revenue growth make up a significantly larger proportion. Similarly, more than 60% of respondents say AI has helped reduce annual costs by 5% or more.
+
+A quarter of respondents are planning to use AI to create new business opportunities and revenue streams.
+
+Optimizing trading and investment portfolios delivers the highest ROI
+
+24% of respondents cite generative AI use cases as the most prevalent, followed by customer experience and engagement at 21%. These numbers highlight the measurable, real-world benefits AI is bringing to the industry as it transforms critical business areas and drives financial returns.
+
+Overcoming the hurdles to AI success
+
+About half of management respondents say they have deployed their first generative AI service or application, while 28% plan to deploy within the next six months. The number of respondents answering that they lack an AI budget has decreased by 50%, a sign that investment in AI development and resource allocation is increasing.
+
+The challenges associated with early exploration of AI are decreasing as well. The survey shows a decrease in the number of respondents citing data issues and privacy concerns, as well as concerns about insufficient training data. These improvements reflect the growing expertise and data management practices in the industry.
+
+As financial services companies allocate budgets and become more adept at managing data, they will be better equipped to leverage AI to improve operational efficiency, security, and innovation across business units.","The financial services industry is reaching a significant milestone in the use of artificial intelligence (AI), as major organizations move beyond testing and experimentation to successfully use AI to drive business outcomes. 
+
+NVIDIA's fifth annual report on the ""State of AI in Financial Services"" shows that financial institutions have integrated various AI initiatives to focus on core applications, marking a substantial improvement in AI capabilities and proficiency. 
+
+AI helps increase revenue and reduce costs. Companies investing in AI are seeing tangible benefits, including increased revenue and cost savings. Nearly 70% of respondents reported that AI has led to revenue growth of 5% or more, with a significantly higher percentage of respondents seeing revenue growth of 10% to 20%. Additionally, over 60% of respondents indicated that AI has helped reduce annual costs by 5% or more. Nearly a quarter of respondents are planning to use AI to create new business opportunities and revenue streams. 
+
+Trading and portfolio optimization is the highest ROI-generating AI use case, accounting for 25% of responses, followed by customer experience and engagement at 21%. These figures highlight AI's measurable real-world benefits in transforming key business areas and driving financial gains.
+
+Overcoming barriers to AI success. Half of the management-level respondents stated that they have already deployed at least one generative AI service or application, with another 28% planning to deploy in the next six months. The number of respondents citing lack of AI budget has halved, indicating increased investment in AI development and resource allocation.
+
+Challenges associated with early AI exploration are similarly decreasing. The survey shows a reduction in the number of companies reporting data issues and privacy concerns, and worries about insufficient training data for models have also diminished. These improvements reflect the growing expertise and data management practices in the industry.
+
+As financial services companies allocate budgets and become more adept at managing data, they can better leverage AI to enhance operational efficiency, security, and innovation across business units."
+1,1,"Generative AI Powers More Use Cases
+After data analytics, generative AI has emerged as the second-most-used AI workload in the financial services industry. The applications of the technology have expanded significantly, from enhancing customer experience to optimizing trading and portfolio management.
+Notably, the use of generative AI for customer experience, particularly via chatbots and virtual assistants, has more than doubled, rising from 25% to 60%. This surge is driven by the increasing availability, cost efficiency and scalability of generative AI technologies for powering more sophisticated and accurate digital assistants that can enhance customer interactions.
+More than half of the financial professionals surveyed are now using generative AI to enhance the speed and accuracy of critical tasks like document processing and report generation.
+Financial institutions are also poised to benefit from agentic AI systems that harness vast amounts of data from various sources and use sophisticated reasoning to autonomously solve complex, multistep problems. Banks and asset managers can use agentic AI systems to enhance risk management, automate compliance processes, optimize investment strategies and personalize customer services.
+Advanced AI Drives Innovation
+Recognizing the transformative potential of AI, companies are taking proactive steps to build AI factories — specially built accelerated computing platforms equipped with full-stack AI software — through cloud providers or on premises. This strategic focus on implementing high-value AI use cases is crucial to enhancing customer service, boosting revenue and reducing costs.
+By tapping into advanced infrastructure and software, companies can streamline the development and deployment of AI models and position themselves to harness the power of agentic AI.
+With industry leaders predicting at least 2x ROI on AI investments, financial institutions remain highly motivated to implement their highest-value AI use cases to drive efficiency and innovation.
+Download the full report to learn more about how financial services companies are using accelerated computing and AI to transform services and business operations.","生成式 AI 驅動更多使用案例
+繼資料分析之後，生成式 AI 已經成為金融服務業裡第二大宗的 AI 工作負載。這項技術的應用範圍已大幅擴展，從提升客戶體驗到最佳化交易和投資組合管理。
+值得注意的是，生成式 AI 在客戶體驗方面的應用，特別是透過聊天機器人和虛擬助理，數量增加了一倍以上，從 25% 上升到 60%。這樣大幅成長的趨勢是基於生成式 AI 技術的可用性、成本效率和可擴展性不斷提高，能夠驅動更複雜、更精準的數位助理，從而提升客戶互動情況。
+半數以上受訪的金融專業人員現正使用生成式 AI 技術，以提高處理文件和產生報告等重要工作的速度和準確性。
+金融機構也準備好從代理型 AI 中受惠，代理型 AI 系統是指利用各種來源的大量資料，並使用複雜的推理流程自主解決複雜的多步驟問題。銀行和資產管理公司可以使用代理型 AI 系統來加強管理風險、自動化合規流程、最佳化投資策略，還有提供個人化的客戶服務。
+先進的 AI 推動創新
+在意識到 AI 的轉型潛力後，企業正積極採取措施，透過與雲端服務供應商合作或是在地端建立 AI 工廠，這些 AI 工廠是專門打造的加速運算平台，配備全端的 AI 軟體。企業在策略上特別鎖定實施高價值的 AI 使用案例，這對於提升客戶服務、增加收入與降低成本來說至關重要。
+企業利用先進的基礎設施和軟體，可以簡化 AI 模型的開發和部署，並在善加發揮代理型 AI 力量方面站穩腳步。
+由於業界領導業者預測 AI 投資的投資報酬率至少為兩倍，因此金融機構仍有很大動力去實現其最高價值的 AI 使用案例，以推動效率和創新。
+下載完整報告，進一步瞭解金融服務公司如何利用加速運算和 AI 來改變服務和業務運作。",AI 帶來亮眼報酬：調查結果揭示金融業最新技術趨勢,https://blogs.nvidia.com.tw/blog/ai-in-financial-services-survey-2025/,"Generative AI Drives More Use Cases
+Following data analytics, generative AI has become the second largest AI workload in the financial services industry. The scope of this technology's application has expanded significantly, from enhancing customer experience to optimizing transactions and investment portfolio management.
+
+What's worth noting is that generative AI's application in customer experience, particularly through chatbots and virtual assistants, has increased by more than double, from 25% to 60%. This significant growth trend is based on the increasing availability, cost-effectiveness, and scalability of generative AI technology, which can drive more complex and precise digital assistants, thereby enhancing customer interactions.
+
+More than half of the surveyed financial professionals are currently using generative AI technology to improve the speed and accuracy of important work such as processing documents and generating reports.
+
+Financial institutions are also ready to benefit from agent-based AI, which refers to the use of large amounts of data from various sources and complex reasoning processes to autonomously solve complex multi-step problems. Banks and asset management companies can use agent-based AI systems to strengthen risk management, automate compliance processes, optimize investment strategies, and provide personalized customer services.
+
+Advanced AI drives innovation
+Following the realization of AI's transformative potential, companies are taking proactive measures by partnering with cloud service providers or establishing AI factories on-site. These AI factories are specialized platforms for accelerated computing, equipped with end-to-end AI software. Companies strategically focus on implementing high-value AI use cases, which are critical for enhancing customer service, increasing revenue, and reducing costs.
+
+With advanced infrastructure and software, companies can simplify the development and deployment of AI models and establish a strong footing in leveraging the power of agent-based AI.
+
+Due to industry leaders predicting that AI investments will yield at least a 2x return on investment, financial institutions still have significant motivation to achieve their highest-value AI use cases to drive efficiency and innovation.
+
+Download the full report to learn more about how financial services companies use accelerated computing and AI to change their services and business operations.","Generative AI Drives More Use Cases
+
+Following data analytics, generative AI has become the second largest AI workload in the financial services industry. The scope of this technology has significantly expanded, from enhancing customer experience to optimizing trading and portfolio management.
+
+Notably, the application of generative AI in customer experience, particularly through chatbots and virtual assistants, has more than doubled, rising from 25% to 60%. This significant growth trend is based on the increasing availability, cost efficiency, and scalability of generative AI technology, enabling the development of more complex and accurate digital assistants, thereby enhancing customer interactions.
+
+More than half of the financial professionals surveyed are currently using generative AI technology to improve the speed and accuracy of critical tasks such as document processing and report generation.
+
+Financial institutions are also poised to benefit from agent-based AI. These systems utilize vast amounts of data from various sources and employ complex reasoning processes to autonomously solve multi-step complex problems. Banks and asset management companies can use agent-based AI systems to strengthen risk management, automate compliance processes, optimize investment strategies, and provide personalized customer services.
+
+Advanced AI Drives Innovation
+
+Recognizing the transformative potential of AI, businesses are actively taking measures by partnering with cloud service providers or establishing local AI factories, which are specialized accelerated computing platforms equipped with end-to-end AI software. Strategically, companies focus particularly on implementing high-value AI use cases that are crucial for improving customer service, increasing revenue, and reducing costs.
+
+By leveraging advanced infrastructure and software, businesses can streamline the development and deployment of AI models and firmly establish themselves in utilizing the power of agent-based AI.
+
+As industry leaders anticipate a return on investment in AI of at least two times, financial institutions have strong motivation to realize their highest-value AI use cases to drive efficiency and innovation.
+
+Download the full report to learn more about how financial services companies are using accelerated computing and AI to transform services and business operations."
+4,0,"Generative AI and foundation models let autonomous machines generalize beyond the operational design domains on which they’ve been trained. Using new AI techniques such as tokenization and large language and diffusion models, developers and researchers can now address longstanding hurdles to autonomy.
+These larger models require massive amounts of diverse data for training, fine-tuning and validation. But collecting such data — including from rare edge cases and potentially hazardous scenarios, like a pedestrian crossing in front of an autonomous vehicle (AV) at night or a human entering a welding robot work cell — can be incredibly difficult and resource-intensive.
+To help developers fill this gap, NVIDIA Omniverse Cloud Sensor RTX APIs enable physically accurate sensor simulation for generating datasets at scale. The application programming interfaces (APIs) are designed to support sensors commonly used for autonomy — including cameras, radar and lidar — and can integrate seamlessly into existing workflows to accelerate the development of autonomous vehicles and robots of every kind.
+Omniverse Sensor RTX APIs are now available to select developers in early access. Organizations such as Accenture, Foretellix, MITRE and Mcity are integrating these APIs via domain-specific blueprints to provide end customers with the tools they need to deploy the next generation of industrial manufacturing robots and self-driving cars.
+Powering Industrial AI With Omniverse Blueprints
+In complex environments like factories and warehouses, robots must be orchestrated to safely and efficiently work alongside machinery and human workers. All those moving parts present a massive challenge when designing, testing or validating operations while avoiding disruptions.
+Mega is an Omniverse Blueprint that offers enterprises a reference architecture of NVIDIA accelerated computing, AI, NVIDIA Isaac and NVIDIA Omniverse technologies. 
+Enterprises can use it to develop digital twins and test AI-powered robot brains that drive robots, cameras, equipment and more to handle enormous complexity and scale.
+Integrating Omniverse Sensor RTX, the blueprint lets robotics developers simultaneously render sensor data from any type of intelligent machine in a factory for high-fidelity, large-scale sensor simulation.
+With the ability to test operations and workflows in simulation, manufacturers can save considerable time and investment, and improve efficiency in entirely new ways.","生成式人工智慧（AI）和基礎模型讓自主機器能夠超越它們所接受訓練的操作設計領域。開發人員和研究人員使用標記化（tokenization）及大型語言和擴散模型等嶄新 AI 技術，現在可以解決一直以來在自主領域方面的各項障礙。
+需要使用大量相異的資料來訓練、微調與驗證這些大型模型。不過收集這些資料（包括從罕見的邊緣情況和潛在危險情境中收集資料，例如行人在夜間橫越自動駕駛車前方，或是人類進入焊接機器人工作單元）可能非常困難，又得耗費不少資源。
+為了協助開發人員填補這個缺口，NVIDIA Omniverse Cloud Sensor RTX API 提供了物理精確的感測器模擬，用於大規模生成資料集。這些應用程式介面（API）用於支援常用於自主機器上的感測器，包括攝影機、雷達與光達，且能完美與現有的工作流程進行整合，以加快開發各種自動駕駛車輛與機器人。
+現已開放部分開發人員搶先體驗
+Omniverse Sensor RTX API。埃森哲（Accenture）、Foretellix、MITRE 和 Mcity等企業正透過特定領域藍圖整合這些 API，為終端客戶提供部署下一代工業製造機器人和自動駕駛車所需的工具。
+使用 Omniverse Blueprints 為工業 AI 提供動力
+在工廠和倉庫等複雜環境中，機器人必須被精心協調，才能安全高效率地與機器和人類工作者並肩作業。在設計、測試或驗證操作，又要避免中斷作業時，所有這些移動部件都會帶來巨大的挑戰。
+Mega 是一個 Omniverse Blueprint ，可為企業提供 NVIDIA 加速運算、AI、NVIDIA Isaac 及 NVIDIA Omniverse 技術的參考架構。企業可以用它開發數位孿生模型，測試由 AI 驅動的機器人大腦，而這些大腦驅動著機器人、攝影機、設備等項目，以處理極為複雜又大量的作業。
+這個整合了 Omniverse Sensor RTX 的藍圖可以讓機器人開發人員同時渲染工廠內任何類型智慧機器的感測器資料，實現高保真、大規模的感測器模擬。
+隨著能夠在模擬環境裡測試操作和工作流程，製造商可以省下大量時間和投資，以全新方式提高作業效率。",建造更聰明的自主機器：NVIDIA 宣布 Omniverse Sensor RTX 推出搶先體驗活動,https://blogs.nvidia.com.tw/blog/omniverse-sensor-rtx-autonomous-machines/,"Generative artificial intelligence (AI) and foundation models enable autonomous machines to surpass the operational design domains in which they were trained. Developers and researchers are using tokenization and large language and diffusion models and other AI techniques to overcome long-standing challenges in the autonomous domain.
+
+Training, fine-tuning, and validating these large models requires an abundance of diverse data. However, collecting this data, including from rare edge cases and potentially hazardous scenarios, such as pedestrians crossing in front of autonomous vehicles at night or humans entering a welding robot workcell, can be extremely difficult and costly.
+
+To help fill this gap, NVIDIA Omniverse Cloud Sensor RTX API offers physically accurate sensor simulation for large-scale data generation. These APIs are designed to support sensors commonly found on autonomous machines, including cameras, radar, and lidar, and can be seamlessly integrated into existing workflows to accelerate the development of various autonomous vehicles and robots.
+
+Omniverse Sensor RTX API is now available for early adopters. Companies like Accenture, Foretellix, MITRE, and Mcity are integrating these APIs into specific domain blueprints to provide end customers with the tools needed to deploy next-generation industrial manufacturing robots and autonomous vehicles.
+
+Harnessing Omniverse Blueprints for Industrial AI
+
+In complex environments such as factories and warehouses, robots must be carefully coordinated to operate safely and efficiently alongside machines and human workers. Designing, testing, or verifying operations while avoiding downtime brings a multitude of challenges to these moving parts.
+
+Mega is an Omniverse Blueprint that provides a reference architecture with NVIDIA acceleration, AI, NVIDIA Isaac, and NVIDIA Omniverse technologies for enterprises. With it, companies can develop digital twins, test AI-driven robot brains, and deploy these brains to robots, cameras, equipment, and other assets to handle complex and massive workloads.
+
+This integrated Blueprint with Omniverse Sensor RTX enables robotics developers to simultaneously render sensor data for any type of intelligent machine within a factory, achieving high-fidelity, large-scale sensor simulation.
+
+By testing operations and workflows in a simulated environment, manufacturers can save significant time and investment and improve operational efficiency in new ways.","Generative Artificial Intelligence (AI) and foundational models enable autonomous machines to operate beyond their training design domains. Developers and researchers use innovative AI technologies like tokenization, large language, and diffusion models to overcome long-standing barriers in the field of autonomy. 
+
+Training, fine-tuning, and validating these large models require a vast amount of diverse data. However, collecting such data, including from rare edge cases and potentially dangerous situations—like pedestrians crossing in front of autonomous vehicles at night or humans entering a welding robot's workspace—can be challenging and resource-intensive.
+
+To help developers bridge this gap, the NVIDIA Omniverse Cloud Sensor RTX API offers physically accurate sensor simulation for large-scale dataset generation. These APIs are designed to support sensors commonly used on autonomous machines, including cameras, radars, and LiDARs, and seamlessly integrate with existing workflows to accelerate the development of various autonomous vehicles and robots.
+
+The Omniverse Sensor RTX API is now available for early access by selected developers. Companies like Accenture, Foretellix, MITRE, and Mcity are integrating these APIs through domain-specific blueprints to equip end customers with the tools needed to deploy next-generation industrial manufacturing robots and autonomous vehicles.
+
+Powering industrial AI with Omniverse Blueprints
+In complex environments like factories and warehouses, robots must be meticulously coordinated to work safely and efficiently alongside machines and human workers. Designing, testing, or validating operations without interrupting ongoing processes presents substantial challenges with these moving parts.
+
+Mega is an Omniverse Blueprint that provides enterprises with a reference architecture for NVIDIA accelerated computing, AI, NVIDIA Isaac, and NVIDIA Omniverse technologies. Enterprises can use it to develop digital twin models and test AI-driven robotic brains, which power robots, cameras, devices, and more to handle highly complex and large-scale operations.
+
+This blueprint, integrated with Omniverse Sensor RTX, allows robot developers to simultaneously render sensor data from any type of intelligent machine within a factory, achieving high-fidelity, large-scale sensor simulation.
+
+By testing operations and workflows in simulated environments, manufacturers can save significant time and investment, enhancing operational efficiency in entirely new ways."
+4,1,"International supply chain solutions company KION Group and Accenture are using the Mega blueprint to build Omniverse digital twins that serve as virtual training and testing environments for industrial AI’s robot brains, tapping into data from smart cameras, forklifts, robotic equipment and digital humans.
+The robot brains perceive the simulated environment with physically accurate sensor data rendered by the Omniverse Sensor RTX APIs. They use this data to plan and act, with each action precisely tracked with Mega, alongside the state and position of all the assets in the digital twin. 
+With these capabilities, developers can continuously build and test new layouts before they’re implemented in the physical world.
+Driving AV Development and Validation
+Autonomous vehicles have been under development for over a decade, but barriers in acquiring the right training and validation data and slow iteration cycles have hindered large-scale deployment.
+To address this need for sensor data, companies are harnessing the NVIDIA Omniverse Blueprint for AV simulation, a reference workflow that enables physically accurate sensor simulation. The workflow uses Omniverse Sensor RTX APIs to render the camera, radar and lidar data necessary for AV development and validation.
+AV toolchain provider Foretellix has integrated the blueprint into its
+Foretify AV development toolchain
+to transform object-level simulation into physically accurate sensor simulation.
+The Foretify toolchain can generate any number of testing scenarios simultaneously. By adding sensor simulation capabilities to these scenarios, Foretify can now enable  developers to evaluate the completeness of their AV development, as well as train and test at the levels of fidelity and scale needed to achieve large-scale and safe deployment. In addition, Foretellix will use the newly announced
+NVIDIA Cosmos platform to generate an even greater diversity of scenarios for verification and validation.
+Nuro, an autonomous driving technology provider with one of the largest level 4 deployments in the U.S., is using the Foretify toolchain to train, test and validate its self-driving vehicles before deployment.
+In addition, research organization MITRE is collaborating with the University of Michigan’s Mcity testing facility to build a digital AV validation framework for regulatory use, including a digital twin of Mcity’s 32-acre proving ground for autonomous vehicles. The project uses the AV simulation blueprint to render physically accurate sensor data at scale in the virtual environment, boosting training effectiveness.
+The future of robotics and autonomy is coming into sharp focus, thanks to the power of high-fidelity sensor simulation. Learn more about these solutions at CES by visiting Accenture at Ballroom F at the Venetian and Foretellix booth 4016 in the West Hall of Las Vegas Convention Center.
+Learn more about the latest in automotive and generative AI technologies by joining
+NVIDIA at CES.","國際供應鏈解決方案公司凱傲集團（KION Group）與埃森哲利用來自智慧攝影機、堆高機、機器人設備和數位人類的資料，使用 Mega 藍圖建立 Omniverse 數位孿生，作為工業AI機器人大腦的虛擬訓練和測試環境。
+機器人大腦透過 Omniverse Sensor RTX API 渲染的物理精確感測器資料來感知模擬環境。機器人使用這些資料來計劃和採取行動，並透過 Mega 精準追蹤每一個動作，以及數位孿生中所有資產的狀態和位置。借助這些功能，開發人員可以在真正部署至實體環境裡之前，不斷建立和測試新配置。
+推動開發與驗證自動駕駛車
+自動駕駛車輛已開發超過十多年，但在取得正確的訓練與驗證資料方面所遇到的阻礙，還有緩慢的迭代週期，都阻礙了大規模部署。
+為了滿足對感測器資料的這種需求，各家公司利用 NVIDIA Omniverse Blueprint for AV simulation，這是一個實現物理精確感測器模擬的參考工作流程。這個工作流程使用 Omniverse Sensor RTX API 來渲染出開發與驗證自動駕駛汽車所需的攝影機、雷達與光達資料。
+自動駕駛汽車工具鏈供應商 Foretellix 已經把這個藍圖納入該公司的 Foretify 自動駕駛車開發工作鏈，將物件級模擬轉換為物理精準感測器模擬。
+Foretify 工具鏈可以同時產生任意數量的測試情境。Foretify 在這些情境中加入感測器模擬功能，開發人員便能評估自己在開發自動駕駛車方面的完整性，並以實現大規模安全部署所需的保真度和規模水平進行訓練和測試。。Foretellix 還將使用最新發表的
+NVIDIA Cosmos 平台，產生更多樣化的情境進行確認與驗證。
+自動駕駛技術提供商 Nuro 是美國規模最大的 level 4 部署業者之一，使用 Foretify 工具鏈在部署前對其自動駕駛車輛進行訓練、測試和驗證。
+再者，研究機構 MITRE 與密西根大學的 Mcity 測試設施合作，建立供主管機關使用的數位自動駕駛車驗證框架，包括 Mcity 32 英畝自動駕駛車試驗場的數位孿生模型。這項合作案使用 自動駕駛車 模擬藍圖，在虛擬環境中大規模渲染出物理精確的感測器資料，以提升訓練成效。
+得益於高保真感測器模擬技術，機器人與自動化的未來正逐漸成為人們關注的焦點。如需更深入瞭解 CES 大會上這些解決方案的資訊，請造訪埃森哲位於拉斯維加斯威尼斯人F展廳的攤位，以及 Foretellix 位於拉斯維加斯展覽中心西館 4016 號的展位。
+欲了解最新的汽車與生成式 AI 技術，參加 NVIDIA 在 CES 大會的各項活動。",建造更聰明的自主機器：NVIDIA 宣布 Omniverse Sensor RTX 推出搶先體驗活動,https://blogs.nvidia.com.tw/blog/omniverse-sensor-rtx-autonomous-machines/,"KION Group, a leading global intralogistics company, and Accenture have leveraged data from smart cameras, forklifts, robotics equipment, and digital humans to create an Omniverse digital twin, powered by Mega Graph, as a virtual training and testing environment for industrial AI robots. The robot brain perceives the simulated environment through physically accurate sensor data rendered by the Omniverse Sensor RTX API. The robot uses this data to plan and act, and through Mega, it precisely tracks every action and the state and location of all assets within the digital twin. By leveraging these capabilities, developers can continuously build and test new configurations before deploying them to physical environments.
+
+Driving Autonomous Vehicle Development
+Autonomous vehicles have been in development for over a decade, but have been hindered by the difficulty in obtaining accurate training and validation data, as well as the slow iteration cycle. To meet this demand for sensor data, companies have turned to NVIDIA Omniverse Blueprint for AV simulation, a reference workflow that realizes physically accurate sensor simulation. This workflow uses the Omniverse Sensor RTX API to render camera, radar, and lidar data needed for developing and validating autonomous vehicles.
+
+Autonomous Vehicle Tools and Services Provider Foretellix has integrated this blueprint into its Foretify autonomous vehicle development workflow, converting object-level simulation to physically accurate sensor simulation. The Foretify toolchain can generate an arbitrary number of test scenarios, with sensor simulation added in these scenarios, allowing developers to evaluate their completeness in developing autonomous vehicles, and train and test at the fidelity and scale required for large-scale deployments. Foretellix is also using the newly released NVIDIA Cosmos platform to generate more diverse scenarios for validation and verification.
+
+Nuro, a leading provider of autonomous technology and one of the largest Level 4 deployment operators in the US, is using the Foretify toolchain to train, test, and validate its autonomous vehicles before deployment.
+
+In addition, research institutions MITRE and the University of Michigan's Mcity test facility are collaborating to establish a digital autonomous vehicle validation framework for government agencies, including a digital twin model of the Mcity 32-acre autonomous vehicle test field. This collaboration is using the autonomous vehicle simulation blueprint to render physically accurate sensor data at scale in a virtual environment, improving training effectiveness.
+
+Thanks to high-fidelity sensor simulation technology, the future of robots and automation is becoming a growing focus area. For more information on these solutions showcased at CES, visit Accenture's booth at the Venetian in Las Vegas, as well as Foretellix's booth #4016 at the West Hall of the Las Vegas Convention Center. For the latest on automotive and generative AI technology, attend NVIDIA's various activities at CES.","The international supply chain solutions company KION Group, in collaboration with Accenture, is using data from smart cameras, forklifts, robotics equipment, and digital humans to build an Omniverse digital twin with Mega blueprints. This serves as a virtual training and testing environment for the industrial AI robot brain. The robot brain perceives the simulated environment through physically accurate sensor data rendered by the Omniverse Sensor RTX API. Robots use this data to plan and take actions, with Mega accurately tracking every movement and the status and location of all assets in the digital twin. These features allow developers to continuously build and test new configurations before deploying them in a physical environment. 
+
+Advancing the Development and Validation of Autonomous Vehicles
+Autonomous vehicles have been in development for over a decade, but obstacles in obtaining the correct training and validation data, along with slow iteration cycles, have hindered large-scale deployment. To meet the demand for sensor data, companies are utilizing the NVIDIA Omniverse Blueprint for AV simulation, a reference workflow that realizes physically accurate sensor simulations. This workflow uses the Omniverse Sensor RTX API to render the camera, radar, and lidar data needed for developing and validating autonomous vehicles.
+
+Foretellix, an autonomous vehicle toolchain supplier, has incorporated this blueprint into the company’s Foretify autonomous vehicle development toolchain, transforming object-level simulation into physically precise sensor simulation. The Foretify toolchain can generate any number of test scenarios simultaneously. By incorporating sensor simulation into these scenarios, developers can assess the integrity of their autonomous vehicle development with the fidelity and scale required for large-scale safe deployment. Foretellix will also use the newly released NVIDIA Cosmos platform to generate more diverse scenarios for validation and verification. 
+
+Nuro, one of the largest level 4 deployment operators in the U.S., uses the Foretify toolchain to train, test, and validate their autonomous vehicles before deployment.
+
+Additionally, the research institution MITRE is collaborating with the University of Michigan's Mcity testing facility to create a digital verification framework for autonomous vehicles for regulatory authorities, including a digital twin model of Mcity's 32-acre autonomous vehicle testing grounds. This collaboration uses the autonomous vehicle simulation blueprint to render physically accurate sensor data on a large scale in virtual environments to enhance training effectiveness.
+
+Thanks to high-fidelity sensor simulation technology, the future of robotics and automation is becoming a focal point of interest. For more information about these solutions presented at the CES conference, visit Accenture's booth at the Venetian F Hall in Las Vegas and Foretellix's booth at the Las Vegas Convention Center West Hall, booth 4016. To stay updated on the latest automotive and generative AI technologies, participate in NVIDIA's activities at the CES conference."
+6,0,"Greetings, Traveler. Prepare for adventure.
+Genshin Impact, the popular open-world action role-playing game, is leaving limited beta and launching for all GeForce NOW members next week.
+Gamers can get their game on today with the six total games joining the GeForce NOW library.
+As announced last week, Warhammer 40,000: Darktide is coming to the cloud at launch — with GeForce technology. This September, members will be able to leap thousands of years into the future to the time of the Space Marines, streaming on GeForce NOW with NVIDIA DLSS and more.
+Plus, the 2.0.41 GeForce NOW app update brings a highly requested feature: in-stream copy-and-paste support from the clipboard while streaming from the PC and Mac apps — so there’s no need to enter a long, complex password for the digital store. Get to your games even faster with this new capability.
+GeForce NOW is also giving mobile gamers more options by bringing the perks of RTX 3080 memberships and PC gaming at 120 frames per second to all devices with support for 120Hz phones. The capability is rolling out in the coming weeks.
+Take a Trip to Teyvat
+After the success of a limited beta and receiving great feedback from members, Genshin Impact is coming next week to everyone streaming on GeForce NOW.
+Embark on a journey as a traveler from another world, stranded in the fantastic land of Teyvat. Search for your missing sibling in a vast continent made up of seven nations. Master the art of elemental combat and build a dream team of over 40 uniquely skilled playable characters – like the newest additions of Yelan and Kuki Shinobu – each with their own rich stories, personalities and combat styles.
+Experience the immersive campaign, dive deep into rich quests alongside iconic characters and complete daily challenges. Charge head-on into battles solo or invite friends to join the adventures. The world is constantly expanding, so bring it wherever you go across devices, streaming soon to underpowered PCs, Macs and Chromebooks on GeForce NOW.
+RTX 3080 members can level up their gaming for the best experience by streaming in 4K resolution and 60 frames per second on the PC and Mac apps.
+Let the Gaming Commence
+All of the action this GFN Thursday kicks off with six new games arriving on the cloud. Members can also gear up for Rainbow Six Siege Year 7 Season 2.
+Get ready for a new Operator, Team Deathmatch map and more in “Rainbow Six Siege” Year 7 Season 2.
+Members can look for the following streaming this week:Chivalry 2(New release on Steam) Starship Troopers – Terran Command(New release on Steam and Epic Games Store) Builder Simulator(Steam) Supraland(Free on Epic Games Store) The Legend of Heroes: Trails of Cold Steel II(Steam) POSTAL: Brain Damaged(Steam)
+Finally, members still have a chance to stream the PC Building Simulator 2 open beta before it ends on Monday, June 20. Experience deeper simulation, an upgraded career mode and powerful new customization features to bring your ultimate PC to life.","旅人你好，準備踏上冒險之旅吧。熱門開放世界動作角色扮演遊戲《原神》即將結束限量公測版，並將於下週推出，供所有 GeForce NOW 會員遊玩。
+還有六款遊戲現已加入 GeForce NOW 遊戲庫，供玩家即刻暢玩。
+正如上週公告，《戰鎚 40K：黑潮 (Warhammer 40,000:  Darktide)》即將於雲端推出，由 GeForce 技術支援。今年九月，會員將能橫跨數千年後的未來，進入太空海軍陸戰隊時代，遊戲將可於 GeForce NOW 上串流。
+前往提瓦特《原神》限時公測版大獲成功，得到會員的極佳回饋，並將於下週開始在 GeForce NOW 上開放串流，供所有玩家遊玩。
+化身來自另一世界的旅人踏上冒險之途，流連於提瓦特的奇幻土地。在由七個國家組成的寬廣大陸尋找失蹤手足。掌握元素戰鬥的藝術，打造一支夢幻團隊，40 多位角色均具備獨一無二的技能，例如最新加入的夜蘭 (Yelan) 和久岐忍 (Kuki Shinobu)，他們各自都有豐富的故事、個性和戰鬥風格。
+在《Chasm》的2.7版「荒夢藏虞淵(Hidden Dreams in the Depths)」更新中，探索故事深處的奧秘。
+體驗身歷其境的戰役、與經典角色一同深入探索豐富任務並完成每日挑戰。衝鋒陷陣單打獨鬥，或邀請好友加入冒險。世界正在持續擴張，所以無論身處何處都能跨裝置使用，快速在低效能的 PC、Mac和 Chromebook 上透過 GeForce NOW串流遊玩。
+遊戲開始
+本週 GFN 以六款於雲端推出的新遊戲揭開序幕。會員也可以準備迎接《虹彩六號：圍攻行動(Rainbow Six Siege)》第 7 年第 2 季。
+準備好迎接《虹彩六號：圍攻行動 （Rainbow Six Siege） 》第 7 年第 2 季新加入的戰鬥員、團隊殊死戰 (Team Deathmatch) 地圖等更多內容。
+會員可於本週稍後期待以下遊戲開放串流：《騎士精神 2 (Chivalry 2)》(於 Steam 全新發佈)《星艦戰將：人類總動員(Starship Troopers – Terran Command)》(於 Steam 與 Epic Games Store 全新發佈)《Builder Simulator》(Steam)《Supraland》(Epic Games Store 開放免費遊玩)《英雄傳說閃之軌跡 II (The Legend of Heroes: Trails of Cold Steel II)》(Steam)《喋血街頭：腦損(POSTAL: Brain Damaged) 》(Steam)
+最後，會員仍有機會在 6 月 20 日星期一結束前，串流遊玩《PC Builder Simulator 2》公測版。體驗更深入的模擬效果、經過升級的生涯模式和強大的全新自訂功能，讓你的終極 PC 栩栩如生。",願望成真：《原神 (Genshin Impact) 》即將於 GeForce NOW 聯盟 Taiwan Mobile 雲端遊戲服務推出,https://blogs.nvidia.com.tw/blog/geforce-now-thursday-june-16/,"A traveler, are you ready to embark on an adventure? The highly-anticipated open-world action role-playing game Genshin Impact is nearing the end of its limited beta test and will be launched next week for all GeForce NOW members to play.
+
+Six new games have been added to the GeForce NOW game library, available to play now.
+
+As previously announced, Warhammer 40,000: Darktide will be launched on the cloud with GeForce technology support. In September, members will be able to travel to a future where space marines rule, with the game streaming on GeForce NOW.
+
+Genshin Impact's limited beta test was a huge success, with excellent feedback from members, and will begin streaming on GeForce NOW next week for all players to play.
+
+As a traveler from another world, embark on an adventure to explore the fantastical lands of Teyvat, searching for a missing companion. Master the art of elemental combat, build a dream team, and choose from over 40 characters, each with unique skills, such as the new Yelan and Kuki Shinobu, with their own stories, personalities, and combat styles.
+
+In Chasm's 2.7 update ""Hidden Dreams in the Depths,"" explore the secrets of the story.
+
+Experience immersive campaigns, explore rich missions with classic characters, and complete daily challenges. Engage in single-player or invite friends to join the adventure. The world is constantly expanding, so you can use it on any device, quickly streaming on low-powered PCs, Macs, and Chromebooks through GeForce NOW.
+
+New Games
+
+This week, GFN kicks off with six new games being launched on the cloud. Members can also prepare for Rainbow Six Siege's Season 7, Year 2.
+
+Get ready for Rainbow Six Siege's Season 7, Year 2, with new operators, Team Deathmatch maps, and more.
+
+Members can expect the following games to be streaming on GeForce NOW this week:
+
+Chivalry 2 (newly released on Steam)
+Starship Troopers – Terran Command (newly released on Steam and Epic Games Store)
+Builder Simulator (Steam)
+Supraland (Epic Games Store free to play)
+The Legend of Heroes: Trails of Cold Steel II (Steam)
+POSTAL: Brain Damaged (Steam)
+
+Lastly, members still have a chance to stream PC Builder Simulator 2's public test before it ends on June 20th. Experience more immersive simulation, upgraded career mode, and powerful new customization features, bringing your ultimate PC to life.","Hello, traveler, get ready to embark on an adventure. The popular open-world action RPG ""Genshin Impact"" is about to conclude its limited beta version and will be launched next week for all GeForce NOW members to play.
+
+Additionally, six new games have now joined the GeForce NOW library for players to enjoy immediately. As announced last week, ""Warhammer 40,000: Darktide"" will soon be launched on the cloud, supported by GeForce technology. In September this year, members will be able to enter the era of Space Marines in the far future, with the game available for streaming on GeForce NOW.
+
+The limited-time beta test for ""Genshin Impact"" in Teyvat was a great success, receiving excellent feedback from members. Starting next week, the game will be available for streaming on GeForce NOW for all players.
+
+Transform into a traveler from another world and embark on an adventure in the fantasy land of Teyvat. Explore the vast continent made up of seven nations in search of your missing sibling. Master the art of elemental combat and build a dream team with over 40 characters, each with unique skills, such as the newly added Yelan and Kuki Shinobu, who each have rich stories, personalities, and combat styles.
+
+In the Version 2.7 update ""Hidden Dreams in the Depths"" of ""The Chasm,"" uncover the mysteries deep within the story. Experience immersive campaigns, explore richly immersive quests with classic characters, and complete daily challenges. Charge into battle alone or invite friends to join the adventure. The world is continuously expanding, so you can access it across devices, streaming quickly on low-performance PCs, Macs, and Chromebooks via GeForce NOW.
+
+Let the games begin. This week, GFN kicks off with six new cloud-distributed games. Members can also look forward to the 2nd season of the 7th year of ""Rainbow Six Siege.""
+
+Get ready to welcome new operatives in ""Rainbow Six Siege"" Year 7 Season 2, new Team Deathmatch maps, and more content. Members can look forward to streaming the following games later this week: ""Chivalry 2"" (newly released on Steam), ""Starship Troopers – Terran Command"" (newly released on Steam and Epic Games Store), ""Builder Simulator"" (Steam), ""Supraland"" (free to play on Epic Games Store), ""The Legend of Heroes: Trails of Cold Steel II"" (Steam), and ""POSTAL: Brain Damaged"" (Steam).
+
+Lastly, members still have the chance to stream the beta version of ""PC Builder Simulator 2"" before it ends on Monday, June 20. Experience deeper simulation effects, an upgraded career mode, and powerful new customization features that bring your ultimate PC to life."
+8,0,"Autonomous vehicle (AV) development is made possible by three distinct computers:
+NVIDIA DGX systems for training the AI-based stack in the data center, NVIDIA Omniverse running on NVIDIA OVX systems for simulation and synthetic data generation, and the NVIDIA AGX in-vehicle computer to process real-time sensor data for safety.
+Together, these purpose-built, full-stack systems enable continuous development cycles, speeding improvements in performance and safety.
+At the CES trade show, NVIDIA today announced a new part of the equation:
+NVIDIA Cosmos, a platform comprising state-of-the-art generative world foundation models (WFMs), advanced tokenizers, guardrails and an accelerated video processing pipeline built to advance the development of physical AI systems such as AVs and robots.
+With Cosmos added to the three-computer solution, developers gain a data flywheel that can turn thousands of human-driven miles into billions of virtually driven miles — amplifying training data quality.
+“The AV data factory flywheel consists of fleet data collection, accurate 4D reconstruction and AI to generate scenes and traffic variations for training and closed-loop evaluation,” said Sanja Fidler, vice president of AI research at NVIDIA. “Using the NVIDIA Omniverse platform, as well as Cosmos and supporting AI models, developers can generate synthetic driving scenarios to amplify training data by orders of magnitude.”
+“Developing physical AI models has traditionally been resource-intensive and costly for developers, requiring acquisition of real-world datasets and filtering, curating and preparing data for training,” said Norm Marks, vice president of automotive at NVIDIA. “Cosmos accelerates this process with generative AI, enabling smarter, faster and more precise AI model development for autonomous vehicles and robotics.”
+Transportation leaders are using Cosmos to build physical AI for AVs, including:
+Waabi
+, a company pioneering generative AI for the physical world, will use Cosmos for the search and curation of video data for AV software development and simulation.
+Wayve
+, which is developing AI foundation models for autonomous driving, is evaluating Cosmos as a tool to search for edge and corner case driving scenarios used for safety and validation.
+AV toolchain provider Foretellix will use Cosmos, alongside NVIDIA Omniverse Sensor RTX APIs, to evaluate and generate high-fidelity testing scenarios and training data at scale.
+In addition, ridesharing giant Uber is partnering with NVIDIA to accelerate autonomous mobility. Rich driving datasets from Uber, combined with the features of the Cosmos platform and
+NVIDIA DGX Cloud, will help AV partners build stronger AI models even more efficiently.
+Availability
+Cosmos WFMs are now available under an open model license on Hugging Face and the NVIDIA NGC catalog. 
+Cosmos models will soon be available as fully optimized NVIDIA NIM microservices.
+Get started with Cosmos and join NVIDIA at CES.","自動駕駛的發展以三台不同的電腦實現：
+NVIDIA DGX 系統用於在資料中心訓練以人工智慧（AI）為基礎的堆疊，在 NVIDIA OVX 系統上運行的 NVIDIA Omniverse 用於模擬與產生合成資料，而 NVIDIA AGX 車載電腦則用於即時處理感測器產生出的資料以確保安全。
+這些專門建置的全堆疊系統共同推動持續性的開發進程，加快提高效能與安全性。
+NVIDIA 今日在 CES 大會宣布此方程式又加入一個新成員：NVIDIA Cosmos。 這個平台包含最先進的生成世界基礎模型（WFM）、先進的標記器、護欄和加速影片處理管道，專為推動開發自駕車輛與機器人等實體 AI 系統而打造。
+將 Cosmos 加入三台電腦的解決方案，開發人員獲得一個資料飛輪，可以將人類駕駛所累積出的數千哩的里程轉換為數十億哩的虛擬駕駛里程，提高訓練資料的品質。
+NVIDIA AI 研究部門副總裁 Sanja Fidler 表示：「自動駕駛資料工廠的飛輪包括收集車隊資料、精準的 4D 重構與 AI，以產生場景與各種交通路況，用於訓練與閉環評估。開發人員使用 NVIDIA Omniverse 平台以及 Cosmos 和支援的 AI 模型，可以產生合成的行車場景，將訓練資料放大數倍。」
+NVIDIA車用產品副總裁 Norm Marks 表示：「開發人員在開發實體 AI 模型的過程向來是資源密集且成本高昂的工作，需要取得真實世界的資料集，並且篩選、整理和準備訓練資料。Cosmos利用生成式 AI 加快這個過程，更聰明、快速且精確開發用於自動駕駛和機器人的 AI 模型。」
+交通運輸領域領導業者使用 Cosmos 為自動駕駛建立實體 AI，包括：
+Waabi
+為實體世界開創生成式 AI，使用 Cosmos 搜尋和整理影片資料，用於開發和模擬自動駕駛軟體。
+Wayve
+開發適用於自動駕駛的 AI 基礎模型，正在評估 Cosmos，將其作為搜尋用於安全和驗證之邊緣和極端駕駛情況的工具。
+自駕車工具鏈供應商 Foretellix 使用 Cosmos 與 NVIDIA Omniverse Sensor RTX API，以評估和產生大量高擬真度的測試場景及訓練資料。
+此外，乘車服務巨擘 Uber 也將與 NVIDIA 合作，加速推動開發自動駕駛移動技術。Uber 提供豐富的駕駛資料集，加上 Cosmos 平台與 NVIDIA DGX Cloud，將協助自駕車合作夥伴更有效率地建立更強大的 AI 模型。
+上市時間
+Cosmos WFM 現已在 Hugging Face 及 NVIDIA NGC 目錄上以開放模型授權的方式提供。Cosmos模型即將以完全最佳化 NVIDIA NIM 微服務的形式提供。
+開始使用 Cosmos、觀看示範，並且參加 NVIDIA 在 CES 大會的活動。",NVIDIA以 Cosmos 世界基礎模型增強適用於自動駕駛的三台電腦解決方案,https://blogs.nvidia.com.tw/blog/three-computer-cosmos-ces/,"The development of autonomous driving technology is achieved through three distinct computers: The NVIDIA DGX system, which is used for training AI-based stacks in the data center and runs NVIDIA Omniverse on the NVIDIA OVX system, which is used for simulating and generating synthetic data. The NVIDIA AGX car computer is used to process sensor data in real-time to ensure safety. These purpose-built end-to-end systems drive continuous development and improvement in performance and safety.
+
+NVIDIA today announced at the CES event that it has added a new member to the equation: NVIDIA Cosmos. This platform includes the most advanced World Baseline Model (WFM) generation, advanced markers, guards, and acceleration of video processing pipelines, which are specifically designed to drive the development of autonomous vehicles and other physical AI systems.
+
+Adding Cosmos to the three computer solution, developers get a data wheel that can turn the miles accumulated by human drivers into tens of billions of virtual driving miles, improving the quality of training data.
+
+NVIDIA AI Research Department Vice President Sanja Fidler said: ""The flywheel of the autonomous driving data factory includes collecting fleet data, accurate 4D reconstruction and AI to generate scenarios and various traffic conditions for training and closed-loop evaluation. Using the NVIDIA Omniverse platform and Cosmos and supported AI models, developers can generate synthetic driving scenarios, expanding training data by orders of magnitude.""
+
+NVIDIA Vice President of Automotive Products Norm Marks said: ""Developers in the development of physical AI models have traditionally been resource-intensive and costly work that requires real-world data sets and filtering, processing and preparing training data. Cosmos uses generative AI to accelerate this process, developing smarter, faster and more accurate AI models for autonomous driving and robots.""","The development of autonomous driving is achieved with three different computers: The NVIDIA DGX system is used in data centers to train AI-based stacks, NVIDIA Omniverse running on NVIDIA OVX systems is used for simulation and synthetic data generation, and the NVIDIA AGX in-car computer processes sensor data in real time to ensure safety. These specialized full-stack systems collectively drive continuous development progress, accelerating efficiency and safety improvements. NVIDIA announced at CES today the addition of a new member to this formula: NVIDIA Cosmos. This platform includes cutting-edge World Foundational Models (WFM), advanced labelers, guardrails, and accelerated video processing pipelines, designed to advance the development of autonomous vehicles and robotic physical AI systems.
+
+By integrating Cosmos into the three-computer solution, developers gain a data flywheel that converts thousands of miles of human driving into billions of miles of virtual driving, improving training data quality. Sanja Fidler, Vice President of NVIDIA AI Research, stated: ""The data flywheel of the autonomous driving data factory includes fleet data collection, precise 4D reconstruction, and AI, to generate scenes and various traffic scenarios for training and closed-loop evaluation. Developers using the NVIDIA Omniverse platform, Cosmos, and supported AI models can generate synthetic driving scenes, amplifying training data manyfold.""
+
+Norm Marks, Vice President of NVIDIA Automotive Products, stated: ""Developing physical AI models has always been a resource-intensive and costly task, requiring real-world datasets, sorting, organizing, and preparing training data. Cosmos accelerates this process utilizing generative AI, making the development of AI models for autonomous driving and robotics smarter, faster, and more accurate.""
+
+Leaders in the transportation field using Cosmos to build physical AI for autonomous driving include:
+- Waabi: Pioneering generative AI for the physical world, using Cosmos to search and organize video data for developing and simulating autonomous driving software.
+- Wayve: Developing AI foundational models for autonomous driving, evaluating Cosmos as a tool for discovering edge and extreme driving scenarios for safety and verification.
+- Autonomous driving toolchain supplier Foretellix uses Cosmos and NVIDIA Omniverse Sensor RTX API to evaluate and produce large volumes of high-fidelity test scenarios and training data.
+
+Additionally, ride-hailing giant Uber will partner with NVIDIA to accelerate the development of autonomous mobility technology. Uber provides rich driving datasets, and combined with the Cosmos platform and NVIDIA DGX Cloud, will help autonomous vehicle partners build stronger AI models more efficiently.
+
+Availability:
+Cosmos WFM is now available under an open model license on Hugging Face and NVIDIA NGC catalog. Cosmos models will soon be offered as fully optimized NVIDIA NIM microservices.
+
+Start using Cosmos, watch demonstrations, and participate in NVIDIA's activities at CES."
+10,0,"A new NVIDIA DRIVE AI Systems Inspection Lab will help automotive ecosystem partners navigate evolving industry standards for autonomous vehicle safety.
+The lab, launched today, will focus on inspecting and verifying that automotive partner software and systems on the
+NVIDIA DRIVE AGX
+platform meet the automotive industry’s stringent safety and cybersecurity standards, including AI functional safety.
+The lab has been accredited by the ANSI National Accreditation Board (
+ANAB
+) according to the ISO/IEC 17020 assessment for standards, including:
+Functional safety (ISO 26262)
+SOTIF (ISO 21448)
+Cybersecurity (ISO 21434)
+UN-R regulations, including UN-R 79, UN-R 13-H, UN-R 152, UN-R 155, UN-R 157 and UN-R 171
+AI functional safety (ISO PAS 8800 and ISO/IEC TR 5469)
+“The launch of this new lab will help partners in the global automotive ecosystem create safe, reliable autonomous driving technology,” said Ali Kani, vice president of automotive at NVIDIA. “With accreditation by ANAB, the lab will carry out an inspection plan that combines functional safety, cybersecurity and AI — bolstering adherence to the industry’s safety standards.”
+“ANAB is proud to be the accreditation body for the NVIDIA DRIVE AI Systems Inspection Lab,” said R. Douglas Leonard Jr., executive director of ANAB. “NVIDIA’s comprehensive evaluation verifies the demonstration of competence and compliance with internationally recognized standards, helping ensure that DRIVE ecosystem partners meet the highest benchmarks for functional safety, cybersecurity and AI integration.”
+The new lab builds on NVIDIA’s ongoing safety compliance work with Mercedes-Benz and JLR. Inaugural participants in the lab include Continental and Sony SSS-America.
+“We are pleased to participate in the newly launched NVIDIA Drive AI Systems Inspection Lab and to further intensify the fruitful, ongoing collaboration between our two companies,” said Nobert Hammerschmidt, head of components business at Continental.
+“Self-driving vehicles have the capability to significantly enhance safety on roads,” said Marius Evensen, head of automotive image sensors at Sony SSS-America. “We look forward to working with NVIDIA’s DRIVE AI Systems Inspection Lab to help us deliver the highest levels of safety to our customers.”","全新啟用的 NVIDIA DRIVE AI 系統檢測實驗室（Systems Inspection Lab）將協助汽車生態系合作夥伴掌握不斷發展的自駕車安全產業標準。
+於今日啟用的這處實驗室，將側重於檢測與驗證汽車合作夥伴在 NVIDIA DRIVE AGX 平台上的軟體與系統，是否符合汽車產業嚴格的安全與資安，包括人工智慧（AI）功能安全。
+該實驗室已獲得美國國家標準協會認可委員會（ANAB）根據 ISO/IEC 17020 評估標準的認證，包括：
+功能安全 （ISO 26262）
+SOTIF （ISO 21448）
+資安 （ISO 21434）
+UN-R 法規，包括 UN-R 79、UN-R 13-H、UN-R 152、UN-R 155、UN-R 157 和 UN-R 171
+AI 功能安全 （ISO PAS 8800 和 ISO/IEC TR 5469）
+NVIDIA 車用產品部門副總裁 Ali Kani 表示：「NVIDIA 成立這個新的實驗室，將協助全球汽車產業生態系的合作夥伴發展出安全可靠的自動駕駛技術。在獲得 ANAB 認證後，實驗室將執行結合功能安全、資安與 AI 的檢測計畫，強化遵守業界安全標準的程度。」
+ANAB 執行董事 R. Douglas Leonard Jr 表示：「ANAB 很榮幸成為 NVIDIA DRIVE AI 系統檢測實驗室的認證機構。NVIDIA 的綜合評估驗證其所展示出的能力與遵守國際公認標準，有助於確保 DRIVE 生態系統合作夥伴遵守功能安全、資安和 AI 整合的最高標準。」
+此全新實驗室建立在 NVIDIA 與 Mercedes-Benz 和 JLR 持續進行的安全合規的基礎上。首批加入該實驗室的業者包括大陸集團（Continental）和 Sony SSS-America。
+大陸集團零組件業務部門負責人 Nobert Hammerschmidt 表示：「我們很高興能加入新成立的 NVIDIA Drive AI 系統檢測實驗室，進一步強化我們雙方一路以來卓越的合作成果。」
+Sony SSS-America 車用影像感測器部門負責人 Marius Evensen 表示：「自駕車能夠大幅提高用路安全。我們期待與 NVIDIA 的 DRIVE AI 系統檢測實驗室合作，協助我們為客戶提供最高等級的安全性。」",NVIDIA 啟用 DRIVE AI 系統檢測實驗室，創下業界全新安全里程碑,https://blogs.nvidia.com.tw/blog/drive-ai-lab-ces/,"NVIDIA today launched its Systems Inspection Lab (SIL) as part of its DRIVE Autonomous System Validation efforts. The lab, which is available today, will help its automotive ecosystem partners navigate the evolving standards for autonomous vehicle safety.
+
+The lab focuses on inspecting and verifying the software and systems of automotive partners on the NVIDIA DRIVE AGX platform to ensure compliance with the rigorous safety and security standards of the automotive industry, including artificial intelligence (AI) functionality safety.
+
+The lab has been accredited by the American National Standards Institute (ANSI)-accredited ANAB (ANSI National Accreditation Board) based on the ISO/IEC 17020 evaluation standard, covering:
+
+Function Safety (ISO 26262)
+SOTIF (ISO 21448)
+Cybersecurity (ISO 21434)
+UN-R regulations, including UN-R 79, UN-R 13-H, UN-R 152, UN-R 155, UN-R 157, and UN-R 171
+AI Function Safety (ISO PAS 8800 and ISO/IEC TR 5469)
+
+""NVIDIA is establishing this new lab to help our global automotive ecosystem partners develop safe and reliable autonomous driving technologies,"" said Ali Kani, vice president and general manager of Automotive at NVIDIA. ""With the ANAB accreditation, the lab will now execute a combined functional safety, cybersecurity, and AI testing plan to further enhance the industry's adherence to safety standards.""
+
+""The ANAB is honored to be the accrediting body for NVIDIA's Systems Inspection Lab,"" said R. Douglas Leonard Jr., ANAB Executive Director. ""NVIDIA's comprehensive evaluation and verification demonstrate its capability and compliance with international recognized standards, helping ensure that DRIVE ecosystem partners adhere to the highest standards of functional safety, cybersecurity and AI integration.""
+
+The new lab is based on the ongoing safety-relevant work of NVIDIA and Mercedes-Benz and JLR. The first customers to join the lab are Continental and Sony SSS-America.
+
+""We are excited to join the newly established NVIDIA DRIVE AI Systems Inspection Lab and further strengthen our longstanding collaborative success,"" said Nobert Hammerschmidt, head of Continental's Components division.
+
+""We believe autonomous driving can greatly enhance road safety,"" said Marius Evensen, director of Automotive Imaging Sensors at Sony SSS-America. ""We look forward to collaborating with NVIDIA's DRIVE AI Systems Inspection Lab to help deliver the highest level of safety for our customers.""","The newly launched NVIDIA DRIVE AI Systems Inspection Lab will assist automotive ecosystem partners in mastering the evolving industry standards for autonomous vehicle safety. This lab, which inaugurated today, will focus on testing and verifying whether the software and systems of automotive partners on the NVIDIA DRIVE AGX platform meet the stringent safety and cybersecurity standards of the automotive industry, including AI functional safety.
+
+The lab is certified by the National Accreditation Board of the United States (ANAB) according to ISO/IEC 17020 evaluation standards, including:
+- Functional Safety (ISO 26262)
+- SOTIF (ISO 21448)
+- Cybersecurity (ISO 21434)
+- UN-R Regulations, including UN-R 79, UN-R 13-H, UN-R 152, UN-R 155, UN-R 157, and UN-R 171
+- AI Functional Safety (ISO PAS 8800 and ISO/IEC TR 5469)
+
+Ali Kani, Vice President of NVIDIA’s Automotive Products Division, stated: ""NVIDIA established this new lab to assist partners within the global automotive industry ecosystem in developing safe and reliable autonomous driving technology. With ANAB certification, the lab will execute testing programs that integrate functional safety, cybersecurity, and AI, enhancing the level of compliance with industry safety standards.""
+
+R. Douglas Leonard Jr, Executive Director of ANAB, stated: ""ANAB is honored to be the certifying body for the NVIDIA DRIVE AI Systems Inspection Lab. NVIDIA’s comprehensive evaluation verifies its demonstrated capabilities and compliance with internationally recognized standards, which helps ensure that the DRIVE ecosystem partners adhere to the highest standards of functional safety, cybersecurity, and AI integration.""
+
+This new lab is built upon NVIDIA's ongoing safety compliance collaboration with Mercedes-Benz and JLR. The initial participants joining the lab include Continental and Sony SSS-America.
+
+Norbert Hammerschmidt, Head of the Component Business Unit at Continental, stated: ""We are delighted to join the newly established NVIDIA DRIVE AI Systems Inspection Lab, further strengthening our already excellent cooperative achievements.""
+
+Marius Evensen, Head of Automotive Image Sensor Division at Sony SSS-America, stated: ""Autonomous vehicles can significantly improve road safety. We look forward to collaborating with NVIDIA's DRIVE AI Systems Inspection Lab to help us provide the highest level of safety for our customers."""
+10,1,"“Compliance with functional safety, SOTIF and cybersecurity is particularly challenging for complex systems such as AI-based autonomous vehicles,” said Riccardo Mariani, head of industry safety at NVIDIA. “Through the DRIVE AI Systems Inspection Lab, the correctness of the integration of our partners’ products with DRIVE safety and cybersecurity requirements can be inspected and verified.”
+Now open to all NVIDIA DRIVE AGX platform partners, the lab is expected to expand to include additional automotive and robotics products and add a testing component.
+Complementing International Automotive Safety Standards
+The NVIDIA DRIVE AI Systems Inspection Lab complements the missions of independent third-party certification bodies, including technical service organizations such as TÜV SÜD, TÜV Rheinland and exida, as well as vehicle certification agencies such as VCA and KBA.
+Today’s announcement dovetails with recent significant safety certifications and assessments of NVIDIA automotive products:
+TÜV SÜD
+granted the ISO 21434 Cybersecurity Process certification to NVIDIA for its automotive system-on-a-chip, platform and software engineering processes. Upon certification release, the
+NVIDIA DriveOS
+6.0 operating system conforms with ISO 26262 Automotive Safety Integrity Level (ASIL) D standards.
+“Meeting cybersecurity process requirements is of fundamental importance in the autonomous vehicle era,” said Martin Webhofer, CEO of TÜV SÜD Rail GmbH. “NVIDIA has successfully established processes, activities and procedures that fulfill the stringent requirements of ISO 21434. Additionally, NVIDIA DriveOS 6.0 conforms to ISO 26262 ASIL D standards, pending final certification activities.”
+TÜV Rheinland
+performed an independent United Nations Economic Commission for Europe safety assessment of NVIDIA DRIVE AV related to safety requirements for complex electronic systems.
+“NVIDIA has demonstrated thorough, high-quality, safety-oriented processes and technologies in the context of the assessment of the generic, non-OEM-specific parts of the SAE level 2 NVIDIA DRIVE system,” said Dominik Strixner, global lead functional safety automotive mobility at TÜV Rheinland.
+To learn more about NVIDIA’s work in advancing autonomous driving safety, read the NVIDIA Self-Driving Safety Report.","NVIDIA 產業安全部門負責人Riccardo Mariani 表示：「對於基於 AI 的自動駕駛車這一類複雜系統來說，遵守功能安全、SOTIF 和資安是一件特別挑戰的事。透過 DRIVE AI 系統檢測實驗室，我們可以檢測和驗證合作夥伴的產品是否有正確與 DRIVE 安全和資安要求進行整合。」
+該實驗室目前開放全體 NVIDIA DRIVE AGX 平台合作夥伴使用，預計將加入更多汽車和機器人產品，並且將增加測試環節。
+與國際汽車安全標準相輔相成
+NVIDIA DRIVE AI 系統檢測實驗室與獨立第三方認證機構的任務相輔相成，包括 TÜV SÜD、TÜV Rheinland 和 exida 等技術服務機構，以及 VCA 和 KBA 等車輛認證機構。
+今天宣布的消息與 NVIDIA 車用產品最近獲得的重要安全認證及評估結果不謀而合：
+TÜV SÜD
+授予 NVIDIA 汽車系統單晶片、平台與軟體工程流程 ISO 21434 網路安全流程認證。認證發布後，
+NVIDIA DriveOS
+6.0 作業系統符合 ISO 26262 車輛安全完整性等級（ASIL）D 標準。
+TÜV SÜD Rail GmbH 執行長 Martin Webhofer 表示：「在自動駕駛時代，必須要符合網路安全流程的要求。NVIDIA 已經成功建立了符合 ISO 21434 嚴格要求的流程、活動和程序。通過最後的認證活動後，NVIDIA DriveOS 6.0 還符合 ISO 26262 ASIL D 標準。」
+TÜV Rheinland
+對 NVIDIA DRIVE AV 進行了與複雜電子系統安全要求相關的聯合國歐洲經濟委員會獨立安全評估作業。
+TÜV Rheinland 全球功能安全汽車行動部門主管 Dominik Strixner 表示：「NVIDIA 在 SAE level 2 NVIDIA DRIVE 系統通用、非 OEM 專用零件的評估中，展現出全面、高品質、以安全為導向的流程與技術。」
+若要進一步瞭解 NVIDIA 在推動自動駕駛安全方面的各項工作，請閱讀 NVIDIA 自動駕駛安全報告。",NVIDIA 啟用 DRIVE AI 系統檢測實驗室，創下業界全新安全里程碑,https://blogs.nvidia.com.tw/blog/drive-ai-lab-ces/,"“Given the complexity of this type of system, it's especially challenging to meet the requirements for functional safety, SOTIF and cybersecurity,"" said Riccardo Mariani, Head of Industry Security at NVIDIA. ""Through the DRIVE AI Systems Test Lab, we can test and validate our partners' products to ensure they are properly integrated with DRIVE security and cybersecurity requirements.""
+
+The lab is currently available to all NVIDIA DRIVE AGX platform partners and will be expanded to include additional automotive and robotics products with more testing segments.
+
+The NVIDIA DRIVE AI Systems Test Lab complements the work of independent third-party certification bodies, including TÜV SÜD, TÜV Rheinland and exida, as well as VCA and KBA, automotive certification bodies.
+
+The announcement aligns with recent important security certification and evaluation results for NVIDIA's automotive products:
+
+TÜV SÜD
+
+* Granted NVIDIA automotive system-on-chip, platform and software engineering process ISO 21434 network security process certification.
+* Following the publication of the certification, NVIDIA DriveOS 6.0 meets ISO 26262 vehicle safety integrity level (ASIL) D standard.
+NVIDIA DriveOS 6.0 meets ISO 26262 vehicle safety integrity level (ASIL) D standard.
+
+TÜV SÜD Rail GmbH CEO Martin Webhofer said: “In the era of autonomous driving, it is necessary to meet the requirements for network security processes. NVIDIA has successfully established a process, activities and procedures that meet the strict requirements of ISO 21434. Following the final certification activities, NVIDIA DriveOS 6.0 meets ISO 26262 ASIL D standard.”
+
+TÜV Rheinland
+
+* Conducted an independent safety assessment, related to the requirements for security of complex electronic systems, in accordance with United Nations Economic Commission for Europe.
+Dominik Strixner, Global Functional Safety Automotive Business Unit Manager at TÜV Rheinland, said: “NVIDIA showed a comprehensive, high-quality and safety-oriented process and technology in the evaluation of its SAE level 2, general-use, non-OEM-specific components of the NVIDIA DRIVE system.""
+
+To learn more about NVIDIA’s work in advancing the safety of autonomous driving, please read the NVIDIA Autonomous Driving Safety Report.","Riccardo Mariani, head of NVIDIA's industrial safety department, stated: ""For complex systems such as AI-based autonomous vehicles, complying with functional safety, SOTIF, and cybersecurity is a particularly challenging task. Through the DRIVE AI Systems Testing Lab, we can test and verify whether our partners' products are properly integrated with DRIVE safety and cybersecurity requirements.""
+
+The lab is currently open to all NVIDIA DRIVE AGX platform partners and plans to include more automotive and robotic products, as well as increase the testing scenarios.
+
+Complementing International Automotive Safety Standards  
+The NVIDIA DRIVE AI Systems Testing Lab complements the work of independent third-party certification bodies, including technical service organizations like TÜV SÜD, TÜV Rheinland, and exida, as well as vehicle certification bodies like VCA and KBA.
+
+Today's announcement coincides with recent significant safety certifications and evaluation results for NVIDIA automotive products:
+
+TÜV SÜD  
+Granted the certification for ISO 21434 cybersecurity process for NVIDIA's automotive system-on-chips, platforms, and software engineering processes. After the certification was issued, NVIDIA DriveOS 6.0 complies with the ISO 26262 Automotive Safety Integrity Level (ASIL) D standard.  
+Martin Webhofer, CEO of TÜV SÜD Rail GmbH, stated: ""In the era of autonomous driving, meeting cybersecurity process requirements is essential. NVIDIA has successfully established processes, activities, and procedures that meet the stringent requirements of ISO 21434. After the final certification activities, NVIDIA DriveOS 6.0 also complies with the ISO 26262 ASIL D standard.""
+
+TÜV Rheinland  
+Conducted an independent safety assessment operation related to the safety requirements of complex electronic systems for NVIDIA DRIVE AV as part of the United Nations Economic Commission for Europe.  
+Dominik Strixner, Global Head of Functional Safety Automotive at TÜV Rheinland, said: ""NVIDIA demonstrated comprehensive, high-quality, safety-oriented processes and technologies in the evaluation of SAE Level 2 NVIDIA DRIVE systems, which are generic, non-OEM specific components.""
+
+To learn more about NVIDIA's efforts in promoting autonomous driving safety, please read the NVIDIA Autonomous Driving Safety Report."
