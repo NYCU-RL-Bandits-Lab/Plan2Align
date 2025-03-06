@@ -47,15 +47,16 @@ To run the program with the necessary parameters, use the following command:
 ```bash
 python plan2align.py \
     --task_language English \
+    --dataset "valid_en.csv" \
     --start_index 0 \
-    --end_index 30 \
+    --end_index 5 \
     --cuda_num 0 \
     --threshold 2 \
     --max_iterations 6 \
     --good_ref_contexts_num 5 \
     --good_context_buffer_size 3 \
     --memory_folder "memory" \
-    --output_suffix "t_2_d_6_chunk_0_30"
+    --output_suffix "t_2_d_6_chunk_0_5"
 """
 
 # Argument parser
