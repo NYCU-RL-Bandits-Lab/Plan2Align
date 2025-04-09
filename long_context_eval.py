@@ -2,9 +2,6 @@
 """
 Long Context Evaluation
 
-Usage:
-    python long_context_eval.py --target <TARGET> --task_language <LANGUAGE>
-
 This script performs the following steps:
   1. Reads a specified CSV file containing the evaluation data.
   2. Segments source, reference, and MT texts into sentences and sliding windows.
@@ -81,8 +78,8 @@ def segment_sentences_by_punctuation(text: str, lang: str) -> list:
     paragraphs = text.split('\n')
     for paragraph in paragraphs:
         if paragraph.strip():
-            if lang == "zh":
-                doc = zh_nlp(paragraph)
+            if lang == SRC_LANG:
+                doc = src_nlp(paragraph)
             else:
                 doc = mt_nlp(paragraph)
             for sent in doc.sents:
@@ -131,6 +128,13 @@ def generate_overlap_and_embedding(text: str) -> tuple:
             embeddings_content = f.read()
         with open(overlaps_file, "r", encoding="utf-8") as f:
             overlap_content = f.read()
+
+    for need_to_del_file in [overlaps_file, embed_file]:
+        try:
+            os.remove(need_to_del_file)
+            print(f"Removed file: {need_to_del_file}")
+        except Exception as e:
+            print(f"Error removing {need_to_del_file}: {e}")
 
     return overlap_content, embeddings_content
 
@@ -712,7 +716,7 @@ def compute_metrics_reference_free(src_windows: list, mt_windows: list,
 # -----------------------------------------------------------------------------
 # Paragraph-Level Processing
 # -----------------------------------------------------------------------------
-def paragraph_level_score(row: pd.Series, paragraph_id: int, src_col: str = "zh",
+def paragraph_level_score(row: pd.Series, paragraph_id: int, src_col: str = None,
                           ref_col: str = None, mt_col: str = None) -> None:
     """
     Process alignment and scoring for a single paragraph. Steps include:
@@ -728,7 +732,7 @@ def paragraph_level_score(row: pd.Series, paragraph_id: int, src_col: str = "zh"
         ref_col (str): Reference column name (default is set based on language).
         mt_col (str): MT column name (default is set based on TARGET).
     """
-    global mt_nlp, zh_nlp
+    global mt_nlp, src_nlp
 
     # Set default columns if not provided
     if ref_col is None:
@@ -808,7 +812,7 @@ def parallel_paragraph_level_score(args: tuple) -> None:
     """
     row, paragraph_id = args
     try:
-        paragraph_level_score(row, paragraph_id, mt_col=TARGET)
+        paragraph_level_score(row, paragraph_id, mt_col=TARGET, src_col= SRC_LANG)
     except Exception as e:
         print(f"Error processing paragraph {paragraph_id}: {e}")
         print(f"{TARGET} result cannot be aligned in paragraph {paragraph_id}\n")
@@ -833,7 +837,7 @@ def evaluate_score(src: str, tgt: str, ref: Optional[str] = None) -> dict:
     """
     # Full evaluation (with reference)
     if ref is not None:
-        src_sentences = segment_sentences_by_punctuation(src, "zh")
+        src_sentences = segment_sentences_by_punctuation(src, SRC_LANG)
         ref_sentences = segment_sentences_by_punctuation(ref, LANG)
         tgt_sentences = segment_sentences_by_punctuation(tgt, LANG)
 
@@ -884,7 +888,7 @@ def evaluate_score(src: str, tgt: str, ref: Optional[str] = None) -> dict:
 
     # Reference-free evaluation
     else:
-        src_sentences = segment_sentences_by_punctuation(src, "zh")
+        src_sentences = segment_sentences_by_punctuation(src, SRC_LANG)
         tgt_sentences = segment_sentences_by_punctuation(tgt, LANG)
 
         src_txt = preprocess_sentences(src_sentences)
@@ -976,12 +980,14 @@ parser = argparse.ArgumentParser(description="Set TARGET_FILE, TARGET_COLUMN, an
 parser.add_argument("--file", type=str, default="", help="(Optional) Set the MT target file")
 parser.add_argument("--target_column", type=str, default="", help="(Optional) Set the MT target column")
 parser.add_argument("--save", type=str, default="./", help="(Optional) Set the save folder")
+parser.add_argument("--src_language", type=str, required=True, help="Set the task language (English, Russian, German)")
 parser.add_argument("--task_language", type=str, required=True, help="Set the task language (English, Russian, German)")
 
 args = parser.parse_args()
 
 TARGET = args.target_column
 TASK_LANGUAGE = args.task_language
+SRC_LANGUAGE = args.src_language
 print(f"TARGET: {TARGET}")
 print(f"TASK_LANGUAGE: {TASK_LANGUAGE}")
 
@@ -991,8 +997,29 @@ elif TASK_LANGUAGE == "Russian":
     LANG = 'ru'
 elif TASK_LANGUAGE == "German":
     LANG = 'de'
+elif TASK_LANGUAGE == "Japanese":
+    LANG = 'ja'
+elif TASK_LANGUAGE == "Spanish":
+    LANG = 'es'
+elif TASK_LANGUAGE == "Chinese":
+    LANG = 'zh'
 else:
-    raise ValueError("Unsupported TASK_LANGUAGE. Please choose English, Russian, or German.")
+    raise ValueError("Unsupported TASK_LANGUAGE.")
+
+if SRC_LANGUAGE == "English":
+    SRC_LANG = 'en'
+elif SRC_LANGUAGE == "Russian":
+    SRC_LANG = 'ru'
+elif SRC_LANGUAGE == "German":
+    SRC_LANG = 'de'
+elif SRC_LANGUAGE == "Japanese":
+    SRC_LANG = 'ja'
+elif SRC_LANGUAGE == "Spanish":
+    SRC_LANG = 'es'
+elif SRC_LANGUAGE == "Chinese":
+    SRC_LANG = 'zh'
+else:
+    raise ValueError("Unsupported TASK_LANGUAGE.")
 
 # File and folder path settings
 evaluated_file_path = args.file  # May be empty if not provided
@@ -1016,13 +1043,31 @@ elif TASK_LANGUAGE == "Russian":
     mt_nlp = spacy.load("ru_core_news_sm")
 elif TASK_LANGUAGE == "German":
     mt_nlp = spacy.load("de_core_news_sm")
-zh_nlp = spacy.load("zh_core_web_sm")
+elif TASK_LANGUAGE == "Japanese":
+    mt_nlp = spacy.load("ja_core_news_sm")
+elif TASK_LANGUAGE == "Spanish":
+    mt_nlp = spacy.load("es_core_news_sm")
+elif TASK_LANGUAGE == "Chinese":
+    mt_nlp = spacy.load("zh_core_web_sm")
+    
+if SRC_LANGUAGE == "English":
+    src_nlp = spacy.load("en_core_web_sm")
+elif SRC_LANGUAGE == "Russian":
+    src_nlp = spacy.load("ru_core_news_sm")
+elif SRC_LANGUAGE == "German":
+    src_nlp = spacy.load("de_core_news_sm")
+elif SRC_LANGUAGE == "Japanese":
+    src_nlp = spacy.load("ja_core_news_sm")
+elif SRC_LANGUAGE == "Spanish":
+    src_nlp = spacy.load("es_core_news_sm")
+elif SRC_LANGUAGE == "Chinese":
+    src_nlp = spacy.load("zh_core_web_sm")
 
 # -----------------------------------------------------------------------------
 # Main Process: Parallel processing of paragraphs and score aggregation
 # Command: export LASER="/path/to/laser/"
-# Command for evaluate csv: python long_context_eval.py --file eval_file.csv --target_column qwen --save scoring_result --task_language English
-# Commnad for testing evaluate_score : python long_context_eval.py --task_language English
+# Command for evaluate csv: 
+# python long_context_eval.py --file eval_en_ja.csv --target_column mpc --save eval_en_ja --src_language English --task_language Japanese
 # -----------------------------------------------------------------------------
 if __name__ == "__main__":
     data = pd.read_csv(evaluated_file_path)
@@ -1033,65 +1078,3 @@ if __name__ == "__main__":
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_result = f"{TARGET}: {TASK_LANGUAGE} Overall scores: {overall_scores}, time: {timestamp}\n"
     print(output_result)
-
-    src_paragraph = """
-    "第一百一十章：力量来自欧派
-    “呼！”石小白长出一口气，缓缓睁开了眼睛，梨子那神色紧张的美丽小脸立刻印入眼帘。
-    “怎么样，获知了多少信息？”梨子心里颇为忐忑，觉醒梦重现终究是短暂而片面的，只能获得异能的片面信息。
-    但获得的信息多少却关乎到还原整个异能蓝图的难易度。
-    石小白回答道：“大概知道本王的异能是什么了。”
-    “真的？”梨子一喜，问道：“说说看你获得了哪里信息。”石小白说道：“力量，本王可以从其他人身上获得某种力量。”
-    梨子一愣，问道：“嗯？还有呢？”
-    石小白歪着头思考了一会，摊手道：“就这样。”
-    梨子眼睛一瞪，什么叫就这样？
-    梨子幽幽叹了口气，虽然并不指望觉醒梦重现能够获得多少信息，但仅仅获得一个模糊不清的信息，却是她始料不及的。
-    可以从其他人身上获得某种力量，这大概可以视为使用效果，那么获得力量的条件呢？从其他人身上获得力量会有怎样的限制？
-    想要得心应手地使用自己的异能，必须极为清楚效果，条件和限制的三大规则，完整的异能蓝图极为重要。
-    石小白获得的信息仅仅只是冰山一角，甚至连冰山一角都不算。
-    但梨子知道现在不是抱怨这些的时候，这一切都是她惹出来的祸，她必须帮石小白还原完整的异能蓝图，否则她于心难安。
-    “你知道如何从其他人身上获得力量吗？比如完成某个特定的动作或者做某件事？”梨子尝试性问道。
-    石小白一愣，略微思考了一下，点头道：“本王似乎知道该怎么做。”
-    该怎么从其他人身上获得力量，他的脑海里确实有了一些模糊的概念。
-    “真的？”梨子闻言甚是惊喜，只要知道怎么使用异能就可以通过不断实验来摸索异能蓝图了，她急忙道：“那快试试看！嗯，你就以本小姐为目标，从本小姐身上获得力量吧！”
-    成为异能的实验目标事实上是一件很危险的事情，天知道所谓的某种力量是什么，力量被夺走之后会不会损害身体，那种力量会不会恢复或者能不能还回来。
-    但梨子已经顾及不了这么多了，在她看来一切都是她的错，她是最有责任成为石小白实验对象的人，她必须为此而负责，哪怕会付出什么代价。"
-    """
-
-    ref_paragraph = """
-    "Chapter 110: Strength comes from Oppai
-    “Phew!” Shi Xiaobai exhaled the deep breath he had held in as he gradually opened up his eyes. The first thing he saw was Riko’s beautiful but nervous face.
-    “How is it? How much information did you get?” Riko was feeling uneasy since the repeat of the awakening dream was brief. It only skimmed the surface, so the information gained about the superpower would be greatly lacking.
-    However, the amount of information obtained would determine how difficult it was to reproduce the entire superpower blueprint.
-    Shi Xiaobai answered, “This King roughly knows what his superpower is.”
-    “Really?” Riko was delighted as she asked, “Quick, tell me about the information you gathered.” Shi Xiaobai said, “Strength. This King can obtain the strength of others.”
-    Riko was surprised as she asked, “Huh? Anymore?”
-    Shi Xiaobai cocked his head and gave it some thought before he threw up his hands and said, “That was it.”
-    Riko stared widely. “What do you mean that was it?”
-    Riko gave a faint sigh. Although she should not have expected to obtain much information from the repeat of the awakening dream, she had never expected that all he got was such vague information.
-    To be able to obtain powers from others meant that it was the effect, but what about the condition to obtain strength? What sort of limitations would there be to obtain strength from others?
-    To be able to use his superpower freely, he had to be extremely clear of the three rules, namely, effects, conditions and limitations. A complete superpower blueprint was extremely important.
-    The information Shi Xiaobai had obtained was just a tip of an iceberg, it might even not be able to amount to the tip of an iceberg.
-    However, Riko knew it was not the time to grumble over this. It was all her fault, so she had to restore Shi Xiaobai’s perfect superpower blueprint or she would never feel at ease.
-    “Do you know how to obtain powers from others? For example, must you do a specific move or do certain things?” Riko made an attempted guess.
-    Shi Xiaobai was momentarily taken aback before he pondered for a while. Then, he nodded and said, “This King seems to know how.”
-    Indeed, he had a vague idea how to obtain the strength of others in his mind.
-    “Really?” Riko was pleasantly surprised to hear this. As long as the method to use the superpower was known, she could figure out the superpower blueprint by constant experimentation. She hurriedly said, “Then quick give it a try! Well, you can use me as the target. Obtain your power from my body!”
-    It was actually a very dangerous thing to be the target of a superpower experiment. Only the Heavens knew what strength really meant. It was unknown if it would harm her body if her strength was taken away or if her strength could be restored or if the superpower could be returned.
-    However, Riko could not care so much. She blamed herself for everything that had happened, so she believed she had the responsibility to become Shi Xiaobai’s experimental subject. She had to take responsibility for this matter, regardless of the price."
-    """
-
-    tgt_paragraph = """
-    Chapter 110: Power Comes from the Bosom  "Huff!" Shi Xiaobai took a deep breath and slowly opened his eyes, and immediately, the beautiful, tense face of Pear appeared before him. "How is it? How much information did you get?" Pear was quite anxious; after all, the dream recall was brief and partial, only able to provide fragmentary information about the ability. However, the amount of information obtained directly affected the difficulty of reconstructing the entire ability blueprint. Shi Xiaobai replied, "I roughly know what my ability is." "Really?" Pear asked happily, "Tell me, what information did you obtain?" Shi Xiaobai said, "Power, I can obtain some kind of power from others." Pear was taken aback, "Hm? Anything else?" Shi Xiaobai tilted his head, pondered for a moment, then shrugged, "That's it." Pear's eyes widened in disbelief. What does 'that's it' mean? Pear sighed softly; although she hadn't expected to gain much information from the dream recall, obtaining such vague information was beyond her expectations. Being able to obtain power from others could be considered as the effect of the ability, but what were the conditions for obtaining this power? Were there any limitations on obtaining power from others? To use one’s ability skillfully, it was essential to understand clearly the three major rules: the effect, the conditions, and the restrictions of the ability. A complete ability blueprint was crucial. The information Shi Xiaobai had obtained was just the tip of the iceberg, not even a full tip. But Pear knew that now wasn’t the time to complain; all this was her fault, and she had to help Shi Xiaobai reconstruct the complete ability blueprint or she wouldn't feel at ease with herself. "Do you know how to obtain power from others? Like performing a specific action or doing something?" Pear试探性地问道。 Shi Xiaobai was surprised, thought for a moment, then nodded, "It seems I know how to do it." How to obtain power from others, he indeed had some vague concepts in his mind. "Really?" Pear was delighted, as long as she knew how to use the ability, they could experiment repeatedly to figure out the blueprint of the ability. She hurriedly said, "Then try it! Yes, take me as your target and obtain power from me!" Becoming an experimental subject for an ability was actually a dangerous thing; who knew what kind of power it was, whether taking away the power would harm the body, and whether the power would return or could be returned. But Pear no longer cared about these things; in her view, everything was her fault, and she was the most responsible person to become Shi Xiaobai's experimental subject, and she must bear the responsibility, no matter what the cost.
-    """
-
-    # Full evaluation (with reference)
-    print("\n--- Full Evaluation (with reference) ---")
-    result_full = evaluate_score(src=src_paragraph, ref=ref_paragraph, tgt=tgt_paragraph)
-    print("Full evaluation scores:")
-    print(result_full)
-
-    # Reference-free evaluation
-    print("\n--- Reference-Free Evaluation ---")
-    result_rf = evaluate_score(src=src_paragraph, tgt=tgt_paragraph)
-    print("Reference-free evaluation scores:")
-    print(result_rf)

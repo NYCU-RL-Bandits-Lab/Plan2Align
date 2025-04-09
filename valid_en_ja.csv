@@ -1,0 +1,322 @@
+en_url,en_title,en,jp_url,jp_title,ja
+https://developer.nvidia.com/blog/expanding-ai-agent-interface-options-with-2d-and-3d-digital-human-avatars/,Expanding AI Agent Interface Options with 2D and 3D Digital Human Avatars,"When interfacing with
+generative AI
+applications, users have multiple communication options—text, voice, or through digital avatars.
+Traditional chatbot or copilot applications have text interfaces where users type in queries and receive text-based responses. For hands-free communication, speech AI technologies like
+automatic speech recognition
+(ASR) and
+text-to-speech
+(TTS) facilitate verbal interactions, ideal for scenarios like phone-based customer service. Moreover, combining digital avatars with speech capabilities provides a more dynamic interface for users to engage visually with the application. According to Gartner, by 2028, 45% of organizations with more than 500 employees will leverage employee AI avatars to expand the capacity of human capital.
+1
+Digital avatars can vary widely in style—some use cases benefit from photorealistic 3D or 2D avatars, while other use cases work better with a stylized, or cartoonish avatar.
+3D Avatars
+offer fully immersive experiences, showcasing lifelike movements and photorealism. Developing these avatars requires specialized software and technical expertise, as they involve intricate body animations and high-quality renderings.
+2D Avatars
+are quicker to develop and ideal for web-embedded solutions. They offer a streamlined approach to creating interactive AI, often requiring artists for design and animation but less intensive in terms of technical resources.
+To kickstart your creation of a photo-realistic digital human, the
+NVIDIA AI Blueprint on digital humans for customer service
+can be tailored for various use cases. This functionality is now included with support for the NVIDIA Maxine
+Audio2Face-2D
+NIM microservice. ‌Additionally, the blueprint now offers flexibility in rendering for 3D avatar developers to use
+Unreal Engine
+.
+How to add a talking digital avatar to your agent application
+In the AI Blueprint for digital humans, a user interacts with an
+AI agent
+that leverages
+NVIDIA ACE
+technology (Figure 1).
+Figure 1. Architecture diagram for the NVIDIA AI Blueprint for digital humans
+The audio input from the user is sent to the ACE agent which orchestrates the communication between various NIM microservices. The ACE agent uses the
+Riva Parakeet NIM
+to convert the audio to text, which is then processed by a RAG pipeline. The RAG pipeline uses the NVIDIA NeMo Retriever
+embedding
+and
+reranking
+NIM microservices, and an
+LLM NIM
+, to respond with relevant context from stored documents.
+Finally, the response is converted back to speech via Riva TTS, animating the digital human using the Audio2Face-3D NIM or Audio2Face-2D NIM.
+Considerations when designing your AI agent application
+In global enterprises, communication barriers across languages can slow down operations. AI-powered avatars with multilingual capabilities communicate across languages effortlessly. The digital human AI Blueprint provides conversational AI capabilities that simulate human interactions that accommodate users’ speech styles and languages through Riva ASR, neural machine translation (NMT) along with intelligent interruption and barge-in support.
+One of the key benefits of digital human AI agents is their ability to function as “always-on” resources for employees and customers alike. RAG-powered AI agents continuously learn from interactions and improve over time, providing more accurate responses and better user experiences.
+For enterprises considering digital human interfaces, choosing the right avatar and rendering option depends on the use case and customization preferences.
+Use Case
+: 3D avatars are ideal for highly immersive use cases like in physical stores, kiosks or primarily one-to-one interactions, while 2D avatars are effective for web or mobile conversational AI use cases.
+Development and Customization Preferences
+: Teams with 3D and animation expertise can leverage their skillset to create an immersive and ultra-realistic avatar, while teams looking to iterate and customize quickly can benefit from the simplicity of 2D avatars.
+Scaling Considerations:
+Scaling is an important consideration when evaluating avatars and corresponding rendering options. Stream throughput, especially for 3D avatars, is highly dependent on the choice and quality of the character asset used, the desired output resolution and the rendering option of choice (Omniverse Renderer or Unreal Engine) can play a critical role in determining per stream compute footprint.
+NVIDIA Audio2Face-2D allows creation of lifelike 2D avatars from just a portrait image and voice input. Easy and simple configurations allow developers to quickly iterate and produce target avatars and animations for their digital human use cases. With real-time output and cloud-native deployment, 2D digital humans are ideal for interactive use cases and streaming avatars for interactive web-embedded solutions.
+For example, enterprises looking to deploy AI agents across multiple devices and inserting digital humans into web- or mobile-first customer journeys, can benefit from the reduced hardware demands of 2D avatars.
+3D photorealistic avatars provide an unmatched immersive experience for use cases demanding ‌highly empathetic user engagement. NVIDIA Audio2Face-3D and Animation NIM microservices animate a 3D character by generating blendshapes along with subtle head and body animation to create an immersive, photorealistic avatar. The digital human AI Blueprint now supports two rendering options for 3D avatars, including Omniverse Renderer and Unreal Engine Renderer, providing developers the flexibility to integrate the rendering option of their choice.
+To explore how digital humans can enhance your enterprise, visit the
+NVIDIA API catalog
+to learn about the different avatar options.
+Getting started with digital avatars
+For hands-on development with Audio2Face-2D and Unreal Engine NIM microservices,
+apply for ACE Early Access
+or dive into the digital human AI Blueprint
+technical blog
+to learn how you can add digital human interfaces to personalize chatbot applications.
+1
+Gartner®, Hype Cycle for the Future of Work, 2024 by Tori Paulman, Emily Rose McRae, etc., July 2024
+GARTNER is a registered trademark and service mark of Gartner, Inc. and/or its affiliates in the U.S. and internationally and is used herein with permission. All rights reserved.",https://developer.nvidia.com/ja-jp/blog/expanding-ai-agent-interface-options-with-2d-and-3d-digital-human-avatars/,2D と 3D のデジタル ヒューマン アバターによる AI エージェント インターフェイス オプションの拡張,"Reading Time:
+2
+minutes
+ユーザーが
+生成 AI
+アプリケーションを使ってやり取りする際には、テキスト、音声、デジタル アバターなど複数のコミュニケーション オプションを利用することができます。
+従来のチャットボットやコパイロット アプリケーションでは、ユーザーが問い合わせを入力し、テキストベースの応答を受信するテキスト インターフェイスを使用しています。ハンズフリーのコミュニケーションでは、
+自動音声認識
+(ASR: Automatic Speech Recognition) や
+音声合成
+(TTS: Text-To-Speech) などの音声 AI 技術により、電話を使用したカスタマー サービスなどのシナリオに最適な口頭によるやり取りが容易になります。さらに、デジタル アバターに音声機能を持たせることで、ユーザーがアプリケーションを視覚的に使用できるため、ダイナミックなインターフェイスを提供できます。Gartner によると、2028 年までに、従業員 500 名以上の組織の 45% が、人的資本の能力拡大のために、 AI アバターの従業員を活用するようになるそうです。
+1
+デジタル アバターのスタイルは様々で、フォトリアリスティックな 3D または 2D のアバターが適しているケースもあれば、定型化されたアバターや漫画のようなアバターの方が適しているケースもあります。
+3D アバター
+は、リアルな動きと写実性を再現し、完全な没入体験を提供します。このようなアバターの開発には、複雑なボディー アニメーションや高品質のレンダリングが必要となるため、専門的なソフトウェアや技術的な専門知識が必要になります。
+2D アバター
+は開発が迅速で、Web に組み込みソリューションに最適です。インタラクティブな AI の作成に合理的なアプローチを提供し、デザインやアニメーションにはアーティストが必要になることが多いですが、技術的なリソースの面はそれほど負担になりません。
+フォトリアリスティックなデジタル ヒューマンの作成を始めるにあたり、
+カスタマー サービス向けデジタル ヒューマンの NVIDIA AI Blueprint
+は、さまざまなユース ケースに合わせてカスタマイズすることができます。この機能は現在、NVIDIA Maxine
+Audio2Face-2D
+NIM マイクロサービスのサポートに含まれています。さらに、この Blueprint では、3D アバター開発者が
+Unreal Engine
+を使用できるよう、レンダリングに柔軟性を持たせています。
+エージェント アプリケーションに会話するデジタル アバターを追加する方法
+デジタル ヒューマン向け AI Blueprint では、ユーザーが
+NVIDIA ACE
+技術を活用した
+AI エージェント
+と対話します (図 1)。
+図 1. デジタル ヒューマン向け NVIDIA AI Blueprint のアーキテクチャ
+ユーザーによる音声入力は、さまざまな NIM マイクロサービス間の通信を調整する ACE エージェントに送信されます。ACE エージェントは、
+Riva Parakeet NIM
+を使用して音声をテキストに変換し、そのテキストは RAG パイプラインで処理されます。RAG パイプラインでは、NIM マイクロサービスの
+埋め込み
+と
+リランク
+を行う NVIDIA NeMo Retriever と
+LLM NIM
+を使用して、保存されたドキュメントから関連するコンテキストを用いて応答します。
+最後に、Riva TTS を介してこの応答を音声に変換し、Audio2Face-3D NIM または Audio2Face-2D NIM を使用してデジタル ヒューマンをアニメーション化します。
+AI エージェント アプリケーションを設計する際に考慮すべきポイント
+グローバル企業では、言語の壁によるコミュニケーションの障害が業務の妨げとなることがあります。多言語機能を備えた AI 搭載アバターを使用すれば、言語の壁を超えた円滑なコミュニケーションを取ることができます。デジタル ヒューマン AI Blueprint は、Riva ASR やニューラル機械翻訳 (NMT: Neural Machine Translation) に加え、インテリジェントな割り込みやバージイン機能を備え、ユーザーの話し方や言語に柔軟に対応できる、人間らしい対話型 AI を実現します。
+デジタル ヒューマン AI エージェントの主な利点の 1 つは、従業員と顧客の両者にとって「常時稼働する」リソースとして機能できることです。RAG を搭載した AI エージェントは、やりとりから継続的に学習し、時間の経過とともに改善していくため、より正確な対応とより優れたユーザー体験を提供することができます。
+デジタル ヒューマン インターフェイスを検討している企業にとって、適切なアバターとレンダリング オプションの選択は、ユース ケースやカスタマイズ設定に依存します。
+ユース ケース
+: 3D アバターは、実店舗やキオスク (無人端末) など、主に 1対 1 のやりとりのような、非常に没入感の高いユース ケースに最適ですが、2D アバターは、Web やモバイルの対話型 AI ユース ケースに効果的です。
+開発とカスタマイズの設定
+: 3D やアニメーションの専門知識を持つチームは、そのスキルを活用して没入感のある超リアルなアバターを作成できます。一方、反復作業やカスタマイズを迅速に行いたいチームには、シンプルな 2D アバターが有効です。
+スケーリングの考慮すべきポイント
+: アバターと対応するレンダリング オプションを評価する際に、スケーリングは考慮すべき重要なポイントです。ストリームのスループットは、特に 3D アバターの場合、使用するキャラクター アセットの選択と品質によって大きく異なります。希望する出力解像度や選択するレンダリング オプション (Omniverse Renderer または Unreal Engine) は、ストリームあたりの計算フットプリントを決定する上で重要な役割を果たします。
+NVIDIA Audio2Face-2D では、顔写真と音声入力だけでリアルな 2D アバターを作成できます。簡単でシンプルな構成のため、開発者はデジタル ヒューマンのユース ケースに合わせたアバターやアニメーションを迅速に繰り返し作成できます。リアルタイム出力とクラウド ネイティブのデプロイにより、2D デジタル ヒューマンは、インタラクティブなユース ケースや、インタラクティブな Web 組み込みソリューション向けのストリーミング アバターに最適です。
+たとえば、複数のデバイスに AI エージェントをデプロイし、Web またはモバイル ファーストのカスタマー ジャーニーにデジタル ヒューマンを導入しようとしている企業には、2D アバターはハードウェア要件が軽減するのでメリットがあります。
+3D のフォトリアリスティックなアバターは、高い共感が要求されるユーザー エンゲージメントを必要とするユース ケースに、比類のない没入体験を提供します。NVIDIA Audio2Face-3D とアニメーション NIM マイクロサービスは、繊細な頭部と身体のアニメーションとともにブレンドシェイプを生成し、没入感のあるフォトリアリスティックなアバターを作成することで、3D キャラクターをアニメーション化します。デジタル ヒューマン AI Blueprint は、3D アバターのレンダリング オプションをとして、Omniverse レンダラーと Unreal-Engine レンダラーをサポートしており、開発者が選択したレンダリング オプションを柔軟に統合できるようになりました。
+デジタル ヒューマンが企業を強化する方法については、
+NVIDIA API カタログ
+にアクセスして、さまざまなアバターのオプションをご覧ください。
+デジタル アバターを始める
+Audio2Face-2D と Unreal Engine NIM マイクロサービスを使用した実践的な開発については、
+ACE 早期アクセスに申し込む
+か、デジタル ヒューマン AI Blueprint の
+技術ブログ
+にアクセスして、チャットボット アプリケーションをパーソナライズするためにデジタル ヒューマン インターフェイスを追加する方法について学ぶことができます。
+1
+Gartner®, Hype Cycle for the Future of Work, 2024 by Tori Paulman, Emily Rose McRae, etc., July 2024
+GARTNER is a registered trademark and service mark of Gartner, Inc. and/or its affiliates in the U.S. and internationally and is used herein with permission. All rights reserved.
+関連情報
+GTC セッション:
+Enhancing the Digital Human Experience with Cloud Microservices Accelerated by Generative AI
+GTC セッション:
+Build a World of Interactive Avatars Based on NVIDIA Omniverse, AIGC, and LLM
+NGC コンテナー:
+ACE エージェント サンプル フロントエンド
+SDK:
+NVIDIA Tokkio
+ウェビナー:
+How Telcos Transform Customer Experiences with Conversational AI"
+https://developer.nvidia.com/blog/5x-faster-time-to-first-token-with-nvidia-tensorrt-llm-kv-cache-early-reuse/,5x Faster Time to First Token with NVIDIA TensorRT-LLM KV Cache Early Reuse,"In our previous
+blog post
+, we demonstrated how reusing the key-value (KV) cache by offloading it to CPU memory can accelerate time to first token (TTFT) by up to 14x on x86-based NVIDIA H100 Tensor Core GPUs and 28x on the NVIDIA GH200 Superchip. In this post, we shed light on KV cache reuse techniques and best practices that can drive even further TTFT speedups.
+Introduction to KV cache
+LLM models are rapidly being adopted for many tasks, including question-answering, and code generation. To generate a response, these models begin by converting the user’s prompt into tokens, which are then transformed into dense vectors. Extensive dot-product operations follow to mathematically model the relationships between the tokens and build a contextual understanding of the user input. The computational cost of generating this contextual understanding increases quadratically with the length of the input sequence.
+This resource-intensive process generates keys and values, which are cached to avoid recomputation when generating subsequent tokens. Reusing the KV cache reduces the computational load and time needed to generate additional tokens—leading to a faster and more efficient user experience.
+When reusing the KV cache, careful attention must be given to how long it remains in memory, which components to evict first when memory is full, and when it can be reused for new incoming prompts. Optimizing these factors can lead to incremental performance improvements in KV cache reuse. NVIDIA TensorRT-LLM offers three key features that specifically address these areas.
+Early KV cache reuse
+Traditional reuse algorithms require the entire KV cache computation to be completed before any portions of it can be reused with new user prompts. In scenarios such as enterprise chatbots, where system prompts—predefined instructions added to user queries—are essential to direct the LLM’s responses in line with enterprise guidelines, this method can be inefficient.
+When a surge of users interacts with the chatbot simultaneously, each user would require a separate computation of the system prompt KV cache. With TensorRT-LLM, we can instead reuse the system prompt as it is being generated in real time, enabling it to be shared across all users during the burst, rather than recalculating it for each user. This can significantly accelerate inference for use cases requiring system prompts by up to 5x.
+Figure 1. TensorRT-LLM KV cache reuse can speed up TTFT by up to 5x
+Flexible KV cache block sizing
+In reuse implementations, only entire cache memory blocks can be allocated for reuse. For example, if the cache memory block size is 64 tokens and KV cache is 80 tokens, only 64 tokens will be stored for reuse, while the remaining 16 tokens will need to be recomputed. However, if the memory block size is reduced to 16 tokens, all 64 tokens can be stored across five memory blocks, eliminating the need for re-computation.
+This effect is most pronounced when the input sequences are short. For long input sequences, larger blocks can be more beneficial.  As is clear, the more granular the control you have over the KV cache, the better you can optimize it for your specific use case.
+TensorRT-LLM provides fine-grained control over KV cache memory blocks, giving developers the ability to chop them into smaller blocks between 64 to 2 tokens. This optimizes the usage of allocated memory, increases reuse rates, and improves TTFT. When running LLAMA70B on NVIDIA H100 Tensor Core GPUs, we can speed up TTFT up to 7% in multi-user environments by reducing KV cache block size from 64 tokens to 8 tokens.
+Figure 2. Impact of changing KV cache block size on inference speedup
+Efficient KV cache eviction protocols
+Partitioning the KV cache into smaller blocks and evicting unused ones can be effective for memory optimization, but it introduces dependency complexities. When a specific block is used to generate a response, and the result is stored as a new block, it can form a tree-like structure of dependencies.
+Over time, the counters tracking the usage of the source blocks (the branches) may become stale as the dependent nodes (the leaves) are reused. Evicting the source block then requires the eviction of all dependent blocks, which would require recalculation of the KV cache for new user prompts, increasing TTFT.
+To address this challenge, TensorRT-LLM includes intelligent eviction algorithms that can trace the dependent nodes from their source nodes and evict dependent nodes first, even if they have more recent reuse counters. This ensures more efficient memory management while preventing unnecessary evictions of dependent blocks.
+Figure 3. A logical representation of KV cache eviction algorithm show how it can reduce the number of evicted blocks, increasing the likelihood of reuse
+Getting started with TensorRT-LLM KV cache reuse
+Generating KV cache during inference requires a lot of compute and memory resources. Using it efficiently is critical to improving model response, accelerating inference, and increasing system throughput. TensorRT-LLM provides advanced reuse features for developers looking to further optimize TTFT response times for peak performance.
+To start using TensorRT-LLM KV cache reuse check out our
+GitHub documentation
+.",https://developer.nvidia.com/ja-jp/blog/5x-faster-time-to-first-token-with-nvidia-tensorrt-llm-kv-cache-early-reuse/,NVIDIA TensorRT-LLM の KV Cache Early Reuseで、Time to First Token を 5 倍高速化,"Reading Time:
+2
+minutes
+以前の
+ブログ記事
+では、key-value (KV) キャッシュを CPU メモリにオフロードして再利用することで、最初のトークンが出力されるまでの時間 (TTFT: Time To First Token) を x86 ベースの NVIDIA H100 Tensor コア GPU で最大 14 倍、NVIDIA GH200 Superchip で最大 28 倍に高速化できる方法をご紹介しました。本記事では、KV キャッシュの再利用技術と、TTFT のさらなる高速化を実現するベストプラクティスについて解説します。
+KV キャッシュの概要
+LLM モデルは、質問回答やコード生成など、多くのタスクで急速に採用されています。応答を生成するにあたり、これらのモデルはまず、ユーザーのプロンプトをトークンへ変換し、その後これらのトークンを密ベクトルへと変換します。膨大なドット積演算がその後に続き、その後トークン間の関係性を数学的にモデル化し、ユーザー入力に対する文脈理解を構築します。この文脈理解を生成するためにかかる計算コストは、入力シーケンスの長さの二乗に比例して増加します。
+このリソースを大量に消費するプロセスから key とvalue が生成され、後続のトークンを生成するときに再度計算されないようにキャッシュされます。KV キャッシュを再利用することで、追加のトークンを生成する際に必要となる計算負荷と時間が軽減され、より高速で効率的なユーザー体験を実現します。
+KV キャッシュを再利用するときには、キャッシュがメモリに残る期間、メモリが一杯になったときに最初に削除するコンポーネント、および新しい入力プロンプトに再利用できるタイミングなどの点に細心の注意を払う必要があります。これらの要因を最適化することで、KV キャッシュの再利用におけるパフォーマンスの段階的な増加へとつなげることができます。NVIDIA TensorRT-LLM は、これらの分野に特化した 3 つの主要な機能を提供します。
+Early KV cache reuse
+従来の再利用アルゴリズムでは、KV キャッシュをその一部であっても新しいユーザー プロンプトで再利用するためには、事前にすべての KV キャッシュの計算を完了させておく必要がありました。この方法は、LLM のレスポンスを企業のガイドラインに沿ったものにするために、システム プロンプト (ユーザーの問い合わせに追加される事前定義の指示) が不可欠となる企業向けチャットボットなどのシナリオでは、非効率的である可能性があります。
+チャットボットと同時にやり取りするユーザーが急増した場合、各ユーザーに対してシステム プロンプト KV キャッシュを個別に計算する必要があります。TensorRT-LLM では、リアルタイムで生成されるシステム プロンプトを再利用することができるため、急増時にはすべてのユーザーと共有することができ、ユーザーごとに再計算する必要がありません。これにより、システム プロンプトを必要とするユース ケースの推論を最大 5 倍にまで高速化することができます。
+図 1. TensorRT-LLM KV cache reuse により、TTFT を最大 5 倍高速化
+柔軟な KV キャッシュ ブロック サイズ
+再利用を実装する際には、キャッシュ メモリ ブロック全体のみを再利用に割り当てることができます。例えば、キャッシュ メモリ ブロック サイズが 64 トークンで、KV キャッシュが 80 トークンである場合、再利用のために保存できるのは 64 トークンのみであり、残りの 16 トークンは再計算する必要があります。しかしながら、メモリ ブロック サイズを 16 トークンに減らすと、64 トークンすべてを 5 つのメモリ ブロックに格納することができ、再計算の必要性がなくなります。
+この効果は、入力シーケンスが短いときに最も顕著に現れます。長い入力シーケンスの場合は、より大きなブロックの方がより有益です。明らかに、KV キャッシュをより細かく制御できればできるほど、特定のユース ケースに合わせた最適化も向上します。
+TensorRT-LLM では、KV キャッシュ メモリ ブロックをきめ細かく制御できるため、開発者は KV キャッシュ メモリ ブロックを 64 から 2 トークンまで、より小さなブロックに分割することができます。これにより、割り当てられたメモリの使用が最適化され、再利用率が上昇し、TTFT が改善されます。NVIDIA H100 Tensor コア GPU で LLAMA70B を実行する場合、KV キャッシュ ブロックサイズを 64 トークンから 8 トークンへと減らすことで、マルチユーザー環境で TTFT を最大 7% 高速化できます。
+図 2. KV キャッシュ ブロック サイズの変更による推論の高速化
+効率的な KV キャッシュの除外 (Eviction) プロトコル
+KV キャッシュをより小さなブロックに分割し、未使用のブロックを除外することは、メモリの最適化に効果的ですが、依存関係に複雑さが生まれます。特定のブロックがレスポンスの生成に使用され、その結果が新しいブロックとして保存されると、依存関係のツリー構造が形成される可能性があります。
+時間の経過とともに、ソース ブロック (ブランチ) の使用を追跡するカウンターは、従属ノード (リーフ) が再利用されるにつれて古くなる可能性があります。ソース ブロックを除外するには、従属するすべてのブロックを除外する必要があり、新しいユーザ プロンプトの KV キャッシュを再計算する必要が生じて TTFT が増加します。
+この課題に対処するために、TensorRT-LLM には、従属ノードをソース ノードから追跡し、従属ノードがより最近の再利用カウンターを持っている場合でも、最初に従属ノードを除外することができるインテリジェントな除外アルゴリズムが含まれています。これにより、より効率的にメモリを管理できるようになると共に、従属ブロックの不要な除外を回避できます。
+図 3. KV キャッシュの除外アルゴリズムの論理を表現した図。除外されるブロックの数を減らし、再利用の可能性を高められる様子を示しています。
+TensorRT-LLM KV cache reuse を使い始める
+推論中に KV キャッシュを生成するには、多くの計算とメモリ ソースが必要になります。効率的に使用することが、モデル応答の改善、推論の高速化、システム スループットの向上には不可欠です。TensorRT-LLM は、ピーク性能のために TTFT 応答時間をさらに最適化しようとする開発者に高度な再利用機能を提供します。
+TensorRT-LLM KV cache reuse を使い始めるには、
+GitHub のドキュメント
+を参照してください。
+関連情報
+GTC セッション:
+Speeding up LLM Inference With TensorRT-LLM (TensorRT-LLM による LLM 推論の高速化)
+GTC セッション:
+Optimizing and Scaling LLMs With TensorRT-LLM for Text Generation (テキスト生成のための TensorRT-LLM を使用した LLM の最適化とスケーリング)
+SDK:
+Torch-TensorRT
+SDK:
+TensorRT
+SDK:
+TensorFlow-TensorRT"
+https://developer.nvidia.com/blog/state-of-the-art-multimodal-generative-ai-model-development-with-nvidia-nemo/,State-of-the-Art Multimodal Generative AI Model Development with NVIDIA NeMo,"Generative AI
+has rapidly evolved from text-based models to multimodal capabilities. These models perform tasks like image captioning and visual question answering, reflecting a shift toward more human-like AI. The community is now expanding from text and images to video, opening new possibilities across industries.
+Video AI models are poised to revolutionize industries such as robotics, automotive, and retail. In
+robotics
+, they enhance autonomous navigation in complex, ever-changing environments, which is vital for sectors like manufacturing and warehouse management. In the automotive industry, video AI is propelling autonomous driving, boosting vehicle perception, safety, and predictive maintenance to improve efficiency.
+To build image and video foundation models, developers must curate and preprocess a large amount of training data, tokenize the resulting high-quality data at high fidelity, train or customize pretrained models efficiently and at scale, and then generate high-quality images and videos during inference.
+Announcing NVIDIA NeMo for multimodal generative AI
+NVIDIA NeMo
+is an end-to-end platform for developing, customizing, and deploying generative AI models.
+NVIDIA just announced the expansion of NeMo to support the end-to-end pipeline for developing multimodal models. NeMo enables you to easily curate high-quality visual data, accelerate
+training
+and
+customization
+with highly efficient tokenizers and parallelism techniques, and reconstruct high-quality visuals during inference.
+Accelerated video and image data curation
+High-quality training data ensures high-accuracy results from an AI model. However, developers face various challenges in building data processing pipelines, ranging from scaling to data orchestration.
+NeMo Curator
+streamlines the data curation process, making it easier and faster for you to build multimodal generative AI models. Its out-of-the-box experience minimizes the total cost of ownership (TCO) and accelerates time-to-market.
+While working with visuals, organizations can easily reach petabyte-scale data processing. NeMo Curator provides an orchestration pipeline that can load balance on multiple GPUs at each stage of the data curation. As a result, you can reduce video processing time by 7x compared to a naive GPU-based implementation. The scalable pipelines can efficiently process over 100 PB of data, ensuring the seamless handling of large datasets.
+Figure 1. NVIDIA NeMo Curator video processing speed
+NeMo Curator provides reference video curation models optimized for high-throughput filtering, captioning, and embedding stages to enhance dataset quality, empowering you to create more accurate AI models.
+For instance, NeMo Curator uses an optimized captioning model that delivers an order of magnitude throughput improvement compared to unoptimized inference model implementations.
+NVIDIA Cosmos tokenizers
+Tokenizers map redundant and implicit visual data into compact and semantic tokens, enabling efficient training of large-scale generative models and democratizing their inference on limited computational resources.
+Today’s open video and image tokenizers often generate poor data representations, leading to lossy reconstructions, distorted images, and temporally unstable videos and placing a cap on the capability of generative models built on top of the tokenizers. Inefficient tokenization processes also result in slow encoding and decoding and longer training and inference times, negatively impacting both developer productivity and the user experience.
+NVIDIA Cosmos tokenizers are open models that offer superior visual tokenization with exceptionally large compression rates and cutting-edge reconstruction quality across diverse image and video categories.
+Video 1. Efficient Generative AI Tokenizers for Image and Video
+These tokenizers provide ease of use through a suite of tokenizer standardized models that support vision-language models (VLMs) with discrete latent codes, diffusion models with continuous latent embeddings, and various aspect ratios and resolutions, enabling the efficient management of large-resolution images and videos. This provides you with tools for tokenizing a wide variety of visual input data to build image and video AI models.
+Cosmos tokenizer architecture
+A Cosmos tokenizer uses a sophisticated encoder-decoder structure designed for high efficiency and effective learning. At its core, it employs 3D
+causal convolution blocks
+, which are specialized layers that jointly process spatiotemporal information, and uses causal temporal attention that captures long-range dependencies in data.
+The causal structure ensures that the model uses only past and present frames when performing tokenization, avoiding future frames. This is crucial for aligning with the causal nature of many real-world systems, such as those in physical AI or multimodal LLMs.
+Figure 2. NVIDIA Cosmos tokenizer architecture
+The input is downsampled using 3D wavelets, a signal processing technique that represents pixel information more efficiently. After the data is processed, an inverse wavelet transform reconstructs the original input.
+This approach improves learning efficiency, enabling the tokenizer encoder-decoder learnable modules to focus on meaningful features rather than redundant pixel details. The combination of such techniques and its unique training recipe makes the Cosmos tokenizers a cutting-edge architecture for efficient and powerful tokenization.
+During inference, the Cosmos tokenizers significantly reduce the cost of running the model by delivering up to 12x faster reconstruction compared to leading open-weight tokenizers (Figure 3).
+Figure 3. Quantitative comparison of reconstruction quality (left) and runtime performance (right) for video tokenizers
+The Cosmos tokenizers also produce high-fidelity images and videos while compressing more than other tokenizers, demonstrating an unprecedented quality-compression trade-off.
+Figure 4. Continuous tokenizer compression rate compared to reconstruction quality
+Figure 5. Discrete tokenizer compression rate compared to reconstruction quality
+Although the Cosmos tokenizer regenerates from highly compressed tokens, it is capable of creating high-quality images and videos due to an innovative neural network training technique and architecture.
+Figure 6. Reconstructed video frame for continuous video tokenizers
+Build Your Own Multimodal Models with NeMo
+The expansion of the NVIDIA NeMo platform with at-scale data processing using
+NeMo Curator
+and high-quality tokenization and visual reconstruction using the Cosmos tokenizer empowers you to build state-of-the-art multimodal, generative AI models.
+Join the waitlist
+and be notified when NeMo Curator is available. The tokenizer is available now on the
+/NVIDIA/cosmos-tokenizer
+GitHub repo and
+Hugging Face
+.",https://developer.nvidia.com/ja-jp/blog/state-of-the-art-multimodal-generative-ai-model-development-with-nvidia-nemo/,NVIDIA NeMo による最先端のマルチモーダル生成 AI モデル開発,"Reading Time:
+2
+minutes
+生成 AI
+は、テキストベースのモデルからマルチモーダル機能へと急速に進化しています。これらのモデルは、画像のキャプション作成や視覚的な質問回答などのタスクを実行し、より人間に近い AI へとシフトしていることを反映しています。このコミュニティは現在、テキストや画像から動画へと拡大しており、さまざまな業界で新たな可能性を切り開かれています。
+動画 AI モデルは、ロボティクス、自動車、小売などの業界に革命を起こそうとしています。
+ロボティクス
+では、製造業や倉庫管理などの分野に不可欠な、複雑で変化し続ける環境における自律的なナビゲーションを強化しています。自動車業界では、動画 AI が自動運転を推進し、車両の認識、安全性、予知保全を強化し、効率性を高めています。
+画像や動画の基盤モデルを構築するには、開発者は大量の学習データのキュレーションと事前処理を行い、結果として得られた高品質データを高い忠実度でトークン化し、学習済みモデルを効率的に大規模に学習またはカスタマイズして、推論中に高品質な画像や動画を生成する必要があります。
+マルチモーダル生成 AI 向けの NVIDIA NeMo を発表
+NVIDIA NeMo
+は、生成 AI モデルを開発、カスタマイズ、デプロイするエンドツーエンドのプラットフォームです。
+NVIDIA は、マルチモーダル モデル開発向けのエンドツーエンドのパイプラインをサポートする NeMo の拡張を発表しました。NeMo により、高品質な視覚データを簡単にキュレーションし、高効率なトークナイザーと並列処理技術で
+学習
+と
+カスタマイズ
+を加速し、推論中に高品質なビジュアルを再構築することができます。
+動画と画像データのキュレーションを加速
+高品質な学習データでは、AI モデルから高精度な結果が得られます。しかし、開発者は、データ処理パイプラインの構築において、スケーリングからデータのオーケストレーションまで、さまざまな課題に直面しています。
+NeMo Curator
+は、データ キュレーション プロセスを合理化することで、マルチモーダル生成 AI モデルをより簡単かつ迅速に構築することができます。すぐに試すことができるため、総保有コスト (TCO) を最小限に抑え、市場投入までの時間を短縮します。
+ビジュアルを扱う際には、組織はペタバイト規模のデータ処理を容易に実行できます。NeMo Curator は、データ キュレーションの各段階で複数の GPU に負荷分散できるオーケストレーション パイプラインを提供します。その結果、単純な GPU ベースの実装と比較して、動画処理時間を 7 分の 1 に短縮できます。スケール可能なパイプラインは、100 PB を超えるデータを効率的に処理でき、大規模なデータセットをシームレスに取り扱うことができます。
+図 1. NVIDIA NeMo Curator の動画処理速度
+NeMo Curator は、高いスループットのフィルタリング、キャプション作成、埋め込みの各段階に最適化されたリファレンス ビデオ キュレーション モデルを提供し、データセットの品質を向上させ、より正確な AI モデルの作成をサポートします。
+たとえば、NeMo Curator は、最適化されたキャプション モデルを使用し、最適化されていない推論モデルの実装と比較して、桁違いのスループットの向上を実現します。
+NVIDIA Cosmos トークナイザー
+トークナイザーは、冗長的で暗黙的な視覚データをコンパクトで意味のあるトークンにマッピングし、大規模な生成モデルの効率的な学習を実現し、誰もが限られた計算リソースで推論できるようにします。
+今日のオープンな動画や画像のトークナイザーは、データ表現が不十分なことが多いため、劣化の多い再構築、歪んだ画像、不連続な動画につながり、トークナイザー上に構築された生成モデルの能力に限界をもたらします。トークン化プロセスが非効率なため、エンコードやデコードに時間がかかり、学習や推論の時間が長くなり、開発者の生産性とユーザー体験の両方に悪影響を及ぼします。
+NVIDIA Cosmos トークナイザーは、優れた視覚トークン化を提供するオープンなモデルで、さまざまな画像や動画のカテゴリーで、高い圧縮率と最先端の再構築品質を実現します。
+離散的な潜在コードを備えた視覚言語モデル (VLM: Vision-language Model)、連続した潜在的埋め込みによる拡散モデル、さまざまなアスペクト比や解像度をサポートする一連のトークナイザー標準化モデルを使用して、これらのトークナイザーを簡単に使用でき、高解像度の画像や動画を効率的に管理することができます。これにより、画像や動画 AI モデルを構築するために、幅広い視覚入力データをトークン化するツールが提供されます。
+Cosmos トークナイザーのアーキテクチャ
+Cosmos トークナイザーは、高効率かつ効果的な学習向けに設計されており、高度なエンコーダー / デコーダー構造を使用しています。その中核には 3D
+Causal Convolution Block
+(因果畳み込みブロック) を採用しています。これは時空間情報を共同処理する特殊なレイヤーで、データの長期的な依存関係を捉える Causal Temporal Attention (因果的時間注意機構) を使用しています。
+この因果構造により、トークン化の実行時にモデルが過去と現在のフレームのみを使用し、未来のフレームは使用しません。これは、物理的なAIやマルチモーダルLLMなどの多くの現実世界のシステムの因果性に合わせるために重要です。
+図 2. NVIDIA Cosmos トークナイザーのアーキテクチャ
+入力は、ピクセル情報をより効率的に表す信号処理技術である 3D ウェーブレットを使用してダウンサンプリングされます。データ処理後、逆ウェーベレット変換によって元の入力が再構築されます。
+このアプローチにより、学習効率が向上し、トークナイザーのエンコーダー / デコーダーの学習可能なモジュールは、冗長なピクセルの詳細ではなく、意味のある特徴に焦点を当てることができます。このような技術と独自の学習レシピの組み合わせにより、Cosmos トークナイザーは、効率的かつ強力なトークン化を実現する最先端のアーキテクチャとなっています。
+推論の際、Cosmos トークナイザーは、主要なオープンウェイトのトークナイザーと比較して最大 12 倍高速な再構築を実現し、モデルの実行コストを大幅に削減しました (図 3)。
+図 3. Cosmos トークナイザーと主要なオープンウェイトのトークナイザーとの比較
+Cosmos トークナイザーは、他のトークナイザーよりも高い圧縮率を実現しながら、高い忠実度の画像や動画を生成し、前例のない品質と圧縮のトレードオフを実現しています。
+図 4. 連続トークナイザーの圧縮率と再構築品質の比較
+図 5. 離散トークナイザーの圧縮率と再構築品質の比較
+Cosmos トークナイザーは、高度に圧縮されたトークンから再生成されますが、革新的なニューラル ネットワークの学習技術とアーキテクチャにより、高品質な画像や動画を作成することができます。
+図 6. 連続動画トークナイザーで再構築された動画フレーム
+NeMo で独自のマルチモーダル モデルを構築
+NeMo Curator
+を使用した大規模なデータ処理と、Cosmos トークナイザーを使用した高品質なトークン化やビジュアル再構築を備えた、NVIDIA NeMo プラットフォームの拡張により、最先端のマルチモーダル生成 AI モデルを構築することができます。
+登録
+していただくと、NeMo Curator が利用可能になった際に通知を受け取ることができます。トークナイザーは、現在
+/NVIDIA/cosmos-tokenizer
+GitHub リポジトリおよび
+Hugging Face
+で利用することができます。
+関連情報
+GTC セッション:
+Large Language Model Fine-Tuning using Parameter Efficient Fine-Tuning (PEFT を使用した大規模言語モデルのファインチューニング)
+GTC セッション:
+Large Language Model Fine-Tuning using NVIDIA NeMo (NVIDIA NeMo を使用した大規模言語モデルのファインチューニング – Domino Data Lab 提供)
+SDK:
+NVIDIA NeMo カスタマイザー
+SDK:
+NeMo LLM サービス
+SDK:
+NeMo Megatron"

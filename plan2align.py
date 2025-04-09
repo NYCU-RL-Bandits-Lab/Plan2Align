@@ -11,139 +11,97 @@ import shutil
 import os
 import subprocess
 import json
+from safetensors.torch import load_file
+from transformers import AutoTokenizer
+from trl import AutoModelForCausalLMWithValueHead
+import logging
+import argparse
 
 """
-## Supported Translation Directions
-
-The program currently supports the following translation directions:
-
-- **zh / zh-tw -> en**
-- **zh / zh-tw -> de**
-- **zh / zh-tw -> ru**
-
 ## Dataset Requirements
 
-The dataset must be in CSV format and **must contain a 'zh' column**. 
-
-## Program Execution
-
-During execution, the program will:
-
-- Store the results of each iteration and different final translation tasks (annotation and reference methods) in the `MEMORY` folder.
-- Merge the results of the final iteration into the dataset and save it as a new file.
+The dataset must be in CSV format.  
+Since segmentation is done using the SpaCy library, the program needs to specify the language and install the corresponding segmentation model. 
+You can use the `lang_map` dictionary (Line 81) to define which languages are supported for translation.  
+Additionally, for each CSV column, the columns need to specify the language code, such as `zh` and `en`, and a command should be used to specify which column is the source and which is the target.
 
 ## Reward Model and Preference Model
 
-The Reward Model is implemented based on **Llama-Factory**, but due to the large size of the model, we provide an alternative **preference model** to replace the reward model.
-
+The Reward Model is implemented based on **Llama-Factory**, but due to the large size of the model, we provide an alternative **MetricX-QE** to replace the reward model.
 The program is designed to work with any language model. For convenience, we offer the use of the API provided by **Deep Infra** (meta-llama/Meta-Llama-3.1-8B-Instruct) for inference. 
-
 Please ensure you set the **API key** in the program.
 
 ## Example Command
-
+During execution, the program will store the results of each iteration and different final translation tasks in the `MEMORY` folder.
 To run the program with the necessary parameters, use the following command:
 
 ```bash
 python plan2align.py \
-    --task_language English \
-    --dataset "valid_en.csv" \
-    --start_index 0 \
-    --end_index 5 \
-    --cuda_num 0 \
-    --threshold 2 \
+    --input_file "valid_en_ja.csv" \
+    --rm "metricx" \
+    --src_language English \
+    --task_language Japanese \
+    --threshold 0.7 \
     --max_iterations 6 \
     --good_ref_contexts_num 5 \
-    --good_context_buffer_size 3 \
-    --memory_folder "memory" \
-    --output_suffix "t_2_d_6_chunk_0_5"
+    --cuda_num 0
 """
 
 # Argument parser
 parser = argparse.ArgumentParser(description="Set global variables from terminal.")
+parser.add_argument("--input_file", type=str, help="Set the input file for the translation task.")
+parser.add_argument("--rm", type=str, choices=['llama','metricx'], default='xcomet', help="Set the rm.")
+parser.add_argument("--src_language", type=str, default="Japanese", help="Set the language for the task.")
 parser.add_argument("--task_language", type=str, default="English", help="Set the language for the task.")
-parser.add_argument("--start_index", type=int, default=0, help="Set the start index.")
-parser.add_argument("--end_index", type=int, default=10, help="Set the end index.")
-parser.add_argument("--cuda_num", type=int, default=0, help="Set the cuda number.")
-parser.add_argument("--threshold", type=int, default=2, help="Set the threshold value.")
+parser.add_argument("--threshold", type=float, default=0.7, help="Set the threshold value.")
 parser.add_argument("--max_iterations", type=int, default=6, help="Set the maximum number of iterations.")
 parser.add_argument("--good_ref_contexts_num", type=int, default=5, help="Set the number of good reference contexts.")
-parser.add_argument("--good_context_buffer_size", type=int, default=3, help="Set the size of good context buffer.")
-parser.add_argument("--dataset", type=str, default="valid_en.csv", help="Set the dataset for inference. e.g., valid_en.csv")
-parser.add_argument("--memory_folder", type=str, default="memory", help="Set the folder for memory storage.")
-parser.add_argument("--output_suffix", type=str, default="", help="Suffix to append to the output file name.")
+parser.add_argument("--cuda_num", type=int, default=0, help="Set the cuda.")
 args = parser.parse_args()
 
-# Setting variables based on arguments
 TASK_LANGUAGE = args.task_language
-START_INDEX = args.start_index
-END_INDEX = args.end_index
+SRC_LANGUAGE = args.src_language
 cuda_num = args.cuda_num
-THRESHOLD = args.threshold
-max_iterations = args.max_iterations
-good_ref_contexts_num = args.good_ref_contexts_num
-good_context_buffer_size = args.good_context_buffer_size
-output_suffix = args.output_suffix
-MEMORY_FOLDER = args.memory_folder
+csv_path = args.input_file
 
-csv_path = args.dataset
-new_column_name = 'plan2align'
-stop_memory = list(range(1, max_iterations))
-
-# Output file path
-output_path = f"{TASK_LANGUAGE}_t_{THRESHOLD}_d_{max_iterations}_chunk_{START_INDEX}_{END_INDEX}{output_suffix}.csv"
-
-# Display the settings
-print(f"DATASET: {csv_path}")
 print(f"TASK_LANGUAGE: {TASK_LANGUAGE}")
-print(f"START_INDEX: {START_INDEX}")
-print(f"END_INDEX: {END_INDEX}")
+print(f"SRC_LANGUAGE: {SRC_LANGUAGE}")
 print(f"CUDA: {cuda_num}")
-print(f"THRESHOLD: {THRESHOLD}")
-print(f"MAX_ITERATIONS: {max_iterations}")
-print(f"GOOD_REF_CONTEXTS_NUM: {good_ref_contexts_num}")
-print(f"GOOD_CONTEXT_BUFFER_SIZE: {good_context_buffer_size}")
-print(f"MEMORY_FOLDER: {MEMORY_FOLDER}")
-print(f"Output path: {output_path}")
+
+max_iterations = args.max_iterations
+stop_memory = list(range(1, max_iterations))
+MEMORY_FOLDER = (args.input_file).replace(".csv", "")
+THRESHOLD = args.threshold
+good_ref_contexts_num = args.good_ref_contexts_num 
 
 device = torch.device(f"cuda:{cuda_num}" if torch.cuda.is_available() else "cpu")
 
+lang_map = {
+    "English": ("en", "en_core_web_sm"),
+    "Russian": ("ru", "ru_core_news_sm"),
+    "German": ("de", "de_core_news_sm"),
+    "Japanese": ("ja", "ja_core_news_sm"),
+    "Korean": ("ko", "ko_core_news_sm"),
+    "Spanish": ("es", "es_core_news_sm"),
+    "Chinese": ("zh", "zh_core_web_sm")
+}
+
+def get_lang_and_nlp(language):
+    if language not in lang_map:
+        raise ValueError(f"Unsupported language: {language}")
+    lang_code, model_name = lang_map[language]
+    return lang_code, spacy.load(model_name)
+
+src_lang, src_nlp = get_lang_and_nlp(SRC_LANGUAGE)
+tgt_lang, mt_nlp = get_lang_and_nlp(TASK_LANGUAGE)
+
 openai = OpenAI(
-    api_key='your-api-key',
+    api_key="your-api-key",
     base_url="",
 )
-MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+MODEL_NAME= "google/gemma-2-9b-it" # "meta-llama/Meta-Llama-3.1-8B-Instruct"
 
-################################# path and folder preparation #################################
-
-# Check if the folder exists, if not, create it
-if not os.path.exists(MEMORY_FOLDER):
-    os.makedirs(MEMORY_FOLDER)
-    print(f"Memory folder '{MEMORY_FOLDER}' has been created.")
-else:
-    print(f"Memory folder '{MEMORY_FOLDER}' already exists.") 
-
-# Set the CSV path and alignment data temporary storage based on the task language.
-if TASK_LANGUAGE == "English":
-    if not os.path.exists(f"en_temp_{start_index}"):
-        os.makedirs(f"en_temp_{start_index}")
-        print(f"alignment data temporary storage, en_temp_{start_index} has been created.")
-    else:
-        print(f"alignment data temporary storage, en_temp_{start_index} already exists.") 
-elif TASK_LANGUAGE == "Russian":
-    if not os.path.exists(f"ru_temp_{start_index}"):
-        os.makedirs(f"ru_temp_{start_index}")
-        print(f"alignment data temporary storage, ru_temp_{start_index} has been created.")
-    else:
-        print(f"alignment data temporary storage, ru_temp_{start_index} already exists.") 
-elif TASK_LANGUAGE == "German":
-    if not os.path.exists(f"de_temp_{start_index}"):
-        os.makedirs(f"de_temp_{start_index}")
-        print(f"alignment data temporary storage, de_temp_{start_index} has been created.")
-    else:
-        print(f"alignment data temporary storage, de_temp_{start_index} already exists.") 
-else:
-    raise ValueError(f"Unsupported task language: {TASK_LANGUAGE}")
+################################# folder / file processing #################################
 
 def clear_folder(folder_path):
     if os.path.exists(folder_path):
@@ -166,182 +124,54 @@ def delete_files_with_mt(folder_path):
             except Exception as e:
                 print(f"Failed to delete {file_path}. Reason: {e}")
 
-################################# preference model for ranking #################################
-
-class PreferenceModel(nn.Module):
-    def __init__(self, pretrained_model_name='google/mt5-small'):
-        super(PreferenceModel, self).__init__()
-        self.encoder = MT5ForConditionalGeneration.from_pretrained(pretrained_model_name)
-        self.fc = nn.Linear(self.encoder.config.d_model * 3, 1)  # Concatenation of source, good_mt, and bad_mt embeddings
-
-    def forward(self, source, good_mt, bad_mt, source_mask, good_mt_mask, bad_mt_mask):
-        source_embedding = self.encoder.encoder(input_ids=source, attention_mask=source_mask).last_hidden_state.mean(dim=1)
-        good_mt_embedding = self.encoder.encoder(input_ids=good_mt, attention_mask=good_mt_mask).last_hidden_state.mean(dim=1)
-        bad_mt_embedding = self.encoder.encoder(input_ids=bad_mt, attention_mask=bad_mt_mask).last_hidden_state.mean(dim=1)
-
-        # Concatenate embeddings and pass through linear layer
-        concat_embedding = torch.cat((source_embedding, good_mt_embedding, bad_mt_embedding), dim=-1)
-        logits = self.fc(concat_embedding)
-        return logits
-
-def load_preference_model(model_path):
-    model = PreferenceModel(pretrained_model_name='google/mt5-small')
-    model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True), strict=False)
-    model.to(device)
-    model.eval()
-    return model
-
-def pm_predict_preference(source, translation0, translation1, language="English"):
-    # Tokenize the inputs
-    source_encoding = tokenizer(source, return_tensors="pt", truncation=True, padding='max_length', max_length=128).to(device)
-    trans0_encoding = tokenizer(translation0, return_tensors="pt", truncation=True, padding='max_length', max_length=128).to(device)
-    trans1_encoding = tokenizer(translation1, return_tensors="pt", truncation=True, padding='max_length', max_length=128).to(device)
-
-    # Predict preference
-    with torch.no_grad():
-        preference_score = preference_model(
-            source=source_encoding['input_ids'],
-            good_mt=trans0_encoding['input_ids'],
-            bad_mt=trans1_encoding['input_ids'],
-            source_mask=source_encoding['attention_mask'],
-            good_mt_mask=trans0_encoding['attention_mask'],
-            bad_mt_mask=trans1_encoding['attention_mask']
-        )
-        preference = torch.sigmoid(preference_score).item()
-    
-    # Return result based on preference score
-    if preference > 0.5:
-        print("translation 0 is better")
-        return 0
-    else:
-        print("translation 1 is better")
-        return 1
-
-def pm_find_best_translation(source, translations, language="English"):
-    """
-    Find the best translation among multiple candidates.
-    Args:
-        model: The loaded preference model.
-        tokenizer: The tokenizer for the model.
-        source: The source sentence (string).
-        translations: A list of candidate translations (list of strings).
-        device: The device to run the model on (CPU or GPU).
-    Returns:
-        The best translation string or None if no clear best is found.
-    """
-    
-    if len(translations) < 2:
-        return translations[0] if translations else None
-
-    # Initialize scores for each translation
-    scores = {''.join(translation): 0 for translation in translations}
-
-    # Perform pairwise comparisons
-    for i in range(len(translations)):
-        for j in range(i + 1, len(translations)):
-            translation0 = translations[i]
-            translation1 = translations[j]
-            # Predict preference between two translations
-            result = pm_predict_preference(''.join(source), ''.join(translation0), ''.join(translation1), device)
-            if result == 0:
-                scores[''.join(translation0)] += 1
-            elif result == 1:
-                scores[''.join(translation1)] += 1
-
-    # Find the translation with the highest score
-    max_score = max(scores.values())
-    best_translations = [k for k, v in scores.items() if v == max_score]
-
-    # If there is a tie, return None
-    if len(best_translations) > 1:
-        return None
-
-    return best_translations[0]
-
-def pm_find_worst_buffer_translation(source, translations, language="English"):
-    """
-    Find the worst translation among multiple candidates.
-    Args:
-        source: The source sentence (string).
-        translations: A list of candidate translations (list of strings).
-        device: The device to run the model on (CPU or GPU).
-    Returns:
-        The worst translation string or None if no clear worst is found.
-    """
-    if len(translations) < 2:
-        return translations[0] if translations else None
-
-    # Initialize scores for each translation
-    scores = {translation: 0 for translation in translations}
-
-    # Perform pairwise comparisons
-    for i in range(len(translations)):
-        for j in range(i + 1, len(translations)):
-            translation0 = translations[i]
-            translation1 = translations[j]
-            # Predict preference between two translations
-            result = pm_predict_preference(''.join(source), translation0, translation1, device)
-
-            if result == 0:
-                scores[translation1] += 1  # translation1 is worse
-            elif result == 1:
-                scores[translation0] += 1  # translation0 is worse
-
-    # Find the translation with the lowest score
-    min_score = min(scores.values())
-    worst_translations = [k for k, v in scores.items() if v == min_score]
-
-    # If there is a tie, return None
-    if len(worst_translations) > 1:
-        return None
-
-    return worst_translations[0]
-
-def pm_find_best_buffer_translation(source, translations, language="English"):
-    """
-    Find the worst translation among multiple candidates.
-    Args:
-        source: The source sentence (string).
-        translations: A list of candidate translations (list of strings).
-        device: The device to run the model on (CPU or GPU).
-    Returns:
-        The worst translation string or None if no clear worst is found.
-    """
-    if len(translations) < 2:
-        return translations[0] if translations else None
-
-    # Initialize scores for each translation
-    scores = {translation: 0 for translation in translations}
-
-    # Perform pairwise comparisons
-    for i in range(len(translations)):
-        for j in range(i + 1, len(translations)):
-            translation0 = translations[i]
-            translation1 = translations[j]
-            # Predict preference between two translations
-            result = pm_predict_preference(''.join(source), translation0, translation1, device)
-
-            if result == 0:
-                scores[translation0] += 1  # translation1 is better
-            elif result == 1:
-                scores[translation1] += 1  # translation0 is better
-
-    # Find the translation with the lowest score
-    max_score = max(scores.values())
-    best_translations = [k for k, v in scores.items() if v == max_score]
-
-    # If there is a tie, return None
-    if len(best_translations) > 1:
-        return None
-
-    return best_translations[0]
-
 ################################# reward model for ranking #################################
 
-from safetensors.torch import load_file
-from transformers import AutoTokenizer
-from trl import AutoModelForCausalLMWithValueHead
-import logging
+class metricx_RewardModel:
+    def __init__(self, device):
+        self.device = device
+        self.json_path = os.path.join(os.getcwd(), f'{src_lang}_{tgt_lang}_json_for_metricx')
+        if not os.path.exists(self.json_path):
+            os.makedirs(self.json_path)
+
+    def get_entry(self, src, mt):
+        return {"source": src, "hypothesis": mt, "reference": ""}
+
+    def write_jsonl(self, src_list, mts):
+        with open(os.path.join(self.json_path, 'input.jsonl'), 'w', encoding='utf-8') as output_file:
+            for src, mt in zip(src_list, mts):
+                entry = self.get_entry(src, mt)
+                output_file.write(json.dumps(entry, ensure_ascii=False) + '\n')
+                
+    def run_command(self):
+        devices_map = {'cuda:0':0, 'cuda:1':1, 'cuda:2':2, 'cuda:3':3}
+        command = [
+            "python", "-m", "metricx24.predict",
+            "--tokenizer", "google/mt5-large",
+            "--model_name_or_path", "google/metricx-24-hybrid-large-v2p6",
+            "--max_input_length", "1536",
+            "--batch_size", "1",
+            "--input_file", os.path.join(self.json_path, 'input.jsonl'),
+            "--output_file", os.path.join(self.json_path, 'output.jsonl'),
+            "--device", f"{devices_map.get(self.device, 0)}",
+            "--qe"
+        ]
+        subprocess.run(command)
+
+    def get_predict(self):
+        scores = []
+        with open(os.path.join(self.json_path, 'output.jsonl'), 'r', encoding='utf-8') as new_file:
+            for line in new_file:
+                entry = json.loads(line)
+                score = entry.get('prediction', None)
+                scores.append(score)
+        return scores
+
+    def reward_fn_batch(self, language, src_list, mts):
+        self.write_jsonl(src_list, mts)
+        self.run_command()
+        scores = self.get_predict()
+        rewards = [1 - (score / 25) for score in scores]
+        return rewards
 
 class RewardModel:
     def __init__(self, device, torch_dtype=torch.bfloat16):
@@ -425,134 +255,90 @@ class RewardModel:
             logging.error(f"Error in reward_fn: {str(e)}")
             raise
 
-    def get_len(self, language, translations):
-        try:
-            len_ = 0
-            for translation in translations:
-                l = self.tokenizer(translation, return_tensors="pt").input_ids.to(device).shape[-1]
-                len_ += l
-            return len_
-        except Exception as e:
-            logging.error(f"Error in reward_fn: {str(e)}")
-            raise
-
-def get_token_length(translations, language="English"):
-    token_length = reward_model.get_len(language, translations)
-    return token_length
-
-def rm_predict_preference(source, translation0, translation1, language="English"):
-    translations = [translation0, translation1]
-    for t_i in range(len(translations)):
-        translations[t_i] = ''.join(translations[t_i]).replace('</s>',' ')
-    rewards = reward_model.reward_fn(language, source.replace('</s>',' '), translations)
-    best_index = rewards.index(max(rewards))
-    return best_index
-
-def rm_find_best_translation(source, translations, language="English"):
-    copy_translations = translations.copy()
     
-    if len(translations) < 2:
-        return translations[0] if translations else None
-    
-    for t_i in range(len(translations)):
-        translations[t_i] = ''.join(translations[t_i]).replace('</s>',' ')
-    
-    rewards = reward_model.reward_fn(language, ''.join(source).replace('</s>',' '), translations)
-    
-    print(rewards)
-    
-    best_index = rewards.index(max(rewards))
+if args.rm=='llama':
+    reward_model = llama_RewardModel(device=device)
+elif args.rm=='metricx':
+    reward_model = metricx_RewardModel(device=device)
 
-    print(f"Total translations length = {len(translations)}, and best translation index is: {best_index}")
-
-    if rewards[best_index] >= THRESHOLD:
-        return copy_translations[best_index]
-    else:
-        return None
-
-def rm_find_worst_buffer_translation(source, translations, language="English"):
-    copy_translations = translations.copy()
-    
-    if len(translations) < 2:
-        return translations[0] if translations else None
-
-    rewards = reward_model.reward_fn(language, ''.join(source).replace('</s>',' '), translations)
-    
-    print(rewards)
-
-    worst_index = rewards.index(min(rewards))
-
-    print(f"Total translations length = {len(translations)}, and worst translation index in buffer is: {worst_index}")
-
-    return copy_translations[worst_index]
-
-def rm_find_best_buffer_translation(source, translations, language="English"):
-    copy_translations = translations.copy()
-    
-    if len(translations) < 2:
-        return translations[0] if translations else None
-    rewards = reward_model.reward_fn(language, ''.join(source).replace('</s>',' '), translations)
-    
-    print(rewards)
-    
-    best_index = rewards.index(max(rewards))
-    
-    print(f"Total translations length = {len(translations)}, and best translation index in buffer is: {best_index}")
-
-    if rewards[best_index] >= THRESHOLD:
-        return copy_translations[best_index]
-    else:
-        return None
+def batch_rm_find_best_translation(evals, language):
+    """
+    evals: list of (src, [translation1, translation2, ...])
+    Return the translation with the highest reward in each group that meets the THRESHOLD, along with its score.
+    Otherwise, return (None, score), where score is the highest score in that group.
+    """
+    src_list = []
+    mt_list = []
+    counts = []
+    for src, translations in evals:
+        counts.append(len(translations))
+        for mt in translations:
+            src_list.append(src)
+            mt_list.append(mt)
+    rewards = reward_model.reward_fn_batch(language, src_list, mt_list)
+    best_translations = []
+    index = 0
+    for (src, translations), count in zip(evals, counts):
+        group_rewards = rewards[index: index+count]
+        index += count
+        if count < 2:
+            if translations:
+                best_translations.append((translations[0], group_rewards[0]))
+            else:
+                best_translations.append((None, None))
+        else:
+            best_index = group_rewards.index(max(group_rewards))
+            best_score = group_rewards[best_index]
+            if best_score >= THRESHOLD:
+                best_translations.append((translations[best_index], best_score))
+            else:
+                best_translations.append((None, best_score))
+    return best_translations
 
 ################################# generating translation #################################
 
-def translate_with_deepinfra(source_sentence, buffer, good_sent_size, language="English"):    
+def translate_with_deepinfra(source_sentence, buffer, good_sent_size, src_language, tgt_language):    
     system_prompts = [
         "You are a meticulous translator. Provide a literal, word-for-word translation that preserves the structure and meaning of each individual word.",
         "You are a professional translator. Deliver a clear, formal, and precise translation that faithfully conveys the original meaning.",
         "You are a creative and expressive translator. Render the text in a vivid and imaginative way, as if narrating a captivating story."
     ]
     
-    context_prompt =  f"Below is a specialized, intermediate translation task. The input text is a mix of Chinese and partial {language} translations. "
-    context_prompt += f"In the text, some Chinese sentences are already followed by preliminary {language} translations enclosed in parentheses. "
+    context_prompt =  f"Below is a specialized, intermediate translation task. The input text is a mix of {src_language} and partial {tgt_language} translations. "
+    context_prompt += f"In the text, some {src_language} sentences are already followed by preliminary {tgt_language} translations enclosed in parentheses. "
     context_prompt += f"These provided translations are rough references – they may be incomplete, inconsistent, or not fully aligned with the original meaning.\n\n"
-    context_prompt += f"Your task is to produce an improved {language} translation according to the following guidelines:\n"
-    context_prompt += f"1. **Refinement:** For sections with existing {language} translations (in parentheses), refine and polish them so that they are fluent, accurate, and coherent, fully capturing the meaning of the corresponding Chinese text.\n"
-    context_prompt += f"2. **Completion:** For sections that remain untranslated, translate the Chinese text accurately and naturally in the specified style.\n"
-    context_prompt += f"3. **Translation Order and Structure Preservation:** Maintain the original order and structure of the text. Every Chinese sentence must appear in the same sequence as in the source text, with its corresponding {language} translation (if available) inserted immediately after it. Do not rearrange or reorder any part of the text.\n"
+    context_prompt += f"Your task is to produce an improved {tgt_language} translation according to the following guidelines:\n"
+    context_prompt += f"1. **Refinement:** For sections with existing {tgt_language} translations (in parentheses), refine and polish them so that they are fluent, accurate, and coherent, fully capturing the meaning of the corresponding {src_language} text.\n"
+    context_prompt += f"2. **Completion:** For sections that remain untranslated, translate the {src_language} text accurately and naturally in the specified style.\n"
+    context_prompt += f"3. **Translation Order and Structure Preservation:** Maintain the original order and structure of the text. Every {src_language} sentence must appear in the same sequence as in the source text, with its corresponding {tgt_language} translation (if available) inserted immediately after it. Do not rearrange or reorder any part of the text.\n"
     context_prompt += f"4. **Consistency:** Ensure a uniform tone and style across the entire translation, adhering to the translator role specified.\n"
-    context_prompt += f"5. **Final Output:** Provide the final output as a single, well-structured {language} text. Do not include any extraneous commentary, explanations, annotations, or headers – output only the translation in the correct order.\n\n"
+    context_prompt += f"5. **Final Output:** Provide the final output as a single, well-structured {tgt_language} text. Do not include any extraneous commentary, explanations, annotations, or headers – output only the translation in the correct order.\n\n"
     context_prompt += f"Note: This translation is an intermediate version that may later be merged with other translations. Focus on clarity, coherence, and fidelity to the source text.\n"
 
     # Process the buffer to extract relevant English translations
     processed_source = source_sentence
     if len(buffer) > 0:
         selected_keys = random.sample(buffer.keys(), min(len(buffer), good_sent_size))
-        for key in selected_keys:
-            key_sentences = key.split('</s>')
-            key_i = 0
-            for key_sentence in key_sentences:
-                key_sentence = key_sentence.strip()
-                if key_sentence and (key_sentence in source_sentence) :
-                    selected_sentences =  buffer[key][0]
-                    if key_i >= len(selected_sentences):
-                        translated_sentence = selected_sentences[-1].replace('</s>', '')
-                    else:
-                        translated_sentence = selected_sentences[key_i].replace('</s>', '')
-                    
-                    #  Ensure that the same sentence is not inserted for translation more than once.
-                    if f"\n({translated_sentence})\n" not in processed_source:
-                        processed_source = processed_source.replace(
-                            key_sentence, 
-                            f"{key_sentence}\n({translated_sentence})\n"
-                        )
-                key_i += 1
-
+        for key_sentence in selected_keys:
+            key_sentence = key_sentence.strip()
+            if key_sentence and (key_sentence in source_sentence) :
+                translated_sentence =  buffer[key_sentence][0][0]          
+                if f"\n({translated_sentence})\n" not in processed_source:
+                    processed_source = processed_source.replace(
+                        key_sentence, 
+                        f"{key_sentence}\n({translated_sentence})\n"
+                    )
 
     context_prompt += f"\nHere is the input data for translation:\n{processed_source}\n\n"
     context_prompt += "Apply the above guidelines to produce an improved, coherent translation that strictly follows the original order of the text.\n"
     
-    print("context_prompt")
+    if len(buffer) == 0:
+        context_prompt = f"### Translate this from {src_language} to {tgt_language} and only output the result."
+        context_prompt += f"\n### {src_language}:\n {source_sentence}"
+        context_prompt += f"\n### {tgt_language}:\n"
+
+    print("--------------------------------------------------------------------------------")
+    print("\n context_prompt \n")
     print(context_prompt)
     print("--------------------------------------------------------------------------------")
     
@@ -566,87 +352,60 @@ def translate_with_deepinfra(source_sentence, buffer, good_sent_size, language="
             ]
         )
         translation = response.choices[0].message.content.strip()
+
+        print("--------------------------------------------------------------------------------")
+        print("\n rollout translation: \n")
+        print(translation)
+        print("--------------------------------------------------------------------------------")
+
         translations.append(translation)
     
     return translations
 
-def process_buffer_sentences(source_sentences, buffer, key=None, idx=None, total=None):
-    """
-    Process the translation results in the buffer according to the original sentence order.
-
-    Args:
-        source_sentences (list): List of original Chinese sentences.
-        buffer (dict): Dictionary containing the translation results.
-        key (str, optional): The current key being processed.
-        idx (int, optional): The current index.
-        total (int, optional): The total count.
-
-    Returns:
-        list: A list of non-overlapping translation results arranged in the original order.
-    """
-    translations = []
+def process_buffer_sentences(source_sentences, buffer):
+    translations = []    
     translation_map = {}
     for src_key, trans_list in buffer.items():
         if not trans_list or not isinstance(trans_list, list):
             continue
-        src_sentences = [s.strip() for s in src_key.split('</s>') if s.strip()]
+        src_sentences = [src_key]
+        
         if len(src_sentences) > 0:
-            i = 0 
             for src_sent in src_sentences:
                 if src_sent not in translation_map:
                     translation_map[src_sent] = []
-                if i < len(trans_list[0]):
-                    trans = trans_list[0][i].replace('</s>', '')
-                else:
-                    trans = trans_list[0][-1].replace('</s>', '')
-                
-                translation_map[src_sent].append(trans)
-                i += 1
+                translation_map[src_sent] = trans_list[0]
     
     for src_sent in source_sentences:
-        src_sent = src_sent.replace('</s>', '')
         if src_sent in translation_map and translation_map[src_sent]:
-            # Select the last translation (typically the most complete).
-            translations.append(translation_map[src_sent][-1])
-    
+            translations.append(translation_map[src_sent][0])
     return translations
 
-################################# final_translate methods #################################
-def remove_duplicate_paragraphs(text):
-    lines = text.split("\n")
-    seen = set()
-    new_lines = []
-    for line in reversed(lines):
-        if line.strip() and line not in seen:
-            seen.add(line)
-            new_lines.append(line)
-    return "\n".join(reversed(new_lines))
-
-def final_translate_with_deepinfra_ann(source_sentence, source_segments, buffer, language="English"):
+def final_translate_with_deepinfra(source_sentence, source_segments, buffer, src_language, tgt_language):
     translations = process_buffer_sentences(source_segments, buffer)
-    initial_translation = remove_duplicate_paragraphs("\n".join(translations))
+    initial_translation = "\n".join(translations)
 
     rewrite_prompt = (
-        f"Below is an initial translation of a Chinese text into {language}. "
+        f"Below is an initial translation of a {src_language} text into {tgt_language}. "
         f"This translation may include omissions, inaccuracies, or awkward phrasing. "
         f"Your task is to produce a refined version that is fluent, accurate, and coherent, "
-        f"while faithfully preserving the full meaning of the original Chinese text.\n\n"
+        f"while faithfully preserving the full meaning of the original {src_language} text.\n\n"
         f"### Instructions:\n"
-        f"1. Ensure that every detail in the original Chinese text is accurately represented.\n"
+        f"1. Ensure that every detail in the original {src_language} text is accurately represented.\n"
         f"2. Correct any grammatical errors, unnatural expressions, or inconsistencies.\n"
         f"3. Improve the natural flow so that the translation reads as if written by a native speaker.\n"
         f"4. Do not add, omit, or change any essential details from the source text.\n"
         f"5. Output only the final refined translation without any additional commentary.\n\n"
-        f"### Original Chinese Text:\n{source_sentence}\n\n"
-        f"### Initial {language} Translation:\n{initial_translation}\n\n"
+        f"### Original {src_language} Text:\n{source_sentence}\n\n"
+        f"### Initial {tgt_language} Translation:\n{initial_translation}\n\n"
         f"### Refined Translation:"
     )
 
-    print("rewrite prompt (Method 1):")
+    print("rewrite prompt:")
     print(rewrite_prompt)
 
     rewrite_response = openai.chat.completions.create(
-        model=MODEL_NAME, 
+        model=MODEL_NAME,  # Replace with your actual model name
         messages=[
             {"role": "system", "content": "You are a helpful translator and only output the result."},
             {"role": "user", "content": rewrite_prompt}
@@ -655,66 +414,9 @@ def final_translate_with_deepinfra_ann(source_sentence, source_segments, buffer,
     translation = rewrite_response.choices[0].message.content.strip()
     return translation
 
-def final_translate_with_deepinfra_ref(source_sentence, source_segments, buffer, language="English"):
-    """
-    Generate interleaved Chinese-English translation:
-    - For each sliding window in the buffer, if translation content exists, output the original Chinese sentence first,
-      then use process_buffer_sentences to extract the corresponding English translation, placing the English translation in parentheses following the Chinese sentence.
-    - If the window has no translation content, only the original Chinese sentence will be output.
-    - Combine all items to form the initial interleaved Chinese-English text, and then rewrite the English part using the LLaMA 3.1 8B model to improve quality,
-      while ensuring that the Chinese-English format is preserved.
-
-    Args:
-        buffer (dict): A dictionary with the format {Chinese: [Translation sentence 1, Translation sentence 2, ...]}.
-        language (str): The target language, default is English.
-
-    Returns:
-        str: The rewritten interleaved Chinese-English translation result.
-    """
-
-    translations = process_buffer_sentences(source_segments, buffer)
-    lines = []
-    for src, trans in zip(source_segments, translations):
-        if src and trans:
-            lines.append(src.replace('</s>', ''))
-            lines.append(f"({trans})")
-    initial_bilingual = "\n".join(lines)
-    initial_bilingual = remove_duplicate_paragraphs(initial_bilingual)
-    
-    rewrite_prompt = (
-        f"The following text is a bilingual translation generated from overlapping sliding windows. "
-        f"Each Chinese sentence is followed by its corresponding {language} translation. "
-        f"Your task is to refine the {language} portions for improved fluency, clarity, and accuracy. "
-        f"Do not include the Chinese text in your output, only the refined {language} translation.\n\n"
-        f"### Initial Translation ({language} only):\n{initial_bilingual}\n\n"
-        f"### Refined Translation:"
-    )
-        
-    print("rewrite prompt (Method 3):")
-    print(rewrite_prompt)
-    
-    rewrite_response = openai.chat.completions.create(
-        model=MODEL_NAME,
-        messages=[
-            {"role": "system", "content": "You are a helpful translator and only output the result."},
-            {"role": "user", "content": rewrite_prompt}
-        ]
-    )
-    translation = rewrite_response.choices[0].message.content.strip()
-    return translation
 
 ################################# alignment functions #################################
 
-if TASK_LANGUAGE == "English":
-    mt_nlp = spacy.load("en_core_web_sm")
-elif TASK_LANGUAGE == "Russian":
-    mt_nlp = spacy.load("ru_core_news_sm")
-elif TASK_LANGUAGE == "German":
-    mt_nlp = spacy.load("de_core_news_sm")
-
-zh_nlp = spacy.load("zh_core_web_sm")
-WINDOW_SIZE = 3
-SEPARATOR = "</s>"
 
 def save_sentences_to_txt(sentences, filename):
     i = 0
@@ -729,18 +431,18 @@ def segment_sentences_by_punctuation(text, lang):
     paragraphs = text.split('\n')
     for paragraph in paragraphs:
         if paragraph.strip():
-            if lang == "zh":
-                doc = zh_nlp(paragraph)
-            else:
+            if lang == src_lang:
+                doc = src_nlp(paragraph)
+            if lang == tgt_lang:
                 doc = mt_nlp(paragraph)
             for sent in doc.sents:
-                segmented_sentences.append(sent.text.strip() + SEPARATOR)
+                segmented_sentences.append(sent.text.strip())
     return segmented_sentences
 
 def generate_overlap_and_embedding(txt_file):
     overlaps_file = txt_file + ".overlaps"
     embed_file = txt_file + ".emb"
-    subprocess.run(["overlap.py", "-i", txt_file, "-o", overlaps_file, "-n", "10"])
+    subprocess.run(["./overlap.py", "-i", txt_file, "-o", overlaps_file, "-n", "10"])
     embed_command = [
         "$LASER/tasks/embed/embed.sh",
         overlaps_file,
@@ -752,7 +454,7 @@ def generate_overlap_and_embedding(txt_file):
 def run_vecalign(src_txt, tgt_txt, src_embed, tgt_embed):
     result = subprocess.run(
         [
-            "vecalign.py",
+            "./vecalign.py",
             "--alignment_max_size", "8",
             "--src", src_txt,
             "--tgt", tgt_txt,
@@ -772,12 +474,6 @@ def run_vecalign(src_txt, tgt_txt, src_embed, tgt_embed):
     return alignments
 
 def compute_alignment_stats(alignment_results):
-    """
-    Computes the average alignment cost (ignoring zero-cost alignments) and the proportion of zero-cost alignments.
-
-    :param alignment_results: List of alignment strings in the format "[src]:[tgt]:cost".
-    :return: Tuple (average_cost, zero_cost_ratio)
-    """
     costs = []
     zero_cost_count = 0
 
@@ -790,7 +486,7 @@ def compute_alignment_stats(alignment_results):
                 costs.append(cost)
         except ValueError:
             continue  # Ignore invalid entries
-
+    
     # Compute the average cost, ignoring zero-cost samples
     avg_cost = sum(costs) / len(costs) if costs else 0.0
     zero_cost_ratio = zero_cost_count / len(alignment_results) if alignment_results else 0.0
@@ -824,7 +520,7 @@ def run_vecalign_explore(src_txt, tgt_txt, src_embed, tgt_embed):
     while del_percentile_frac > 0:
         result = subprocess.run(
             [
-                "vecalign.py",
+                "./vecalign.py",
                 "--alignment_max_size", "8",
                 "--del_percentile_frac", str(del_percentile_frac),
                 "--src", src_txt,
@@ -886,33 +582,7 @@ def run_vecalign_explore(src_txt, tgt_txt, src_embed, tgt_embed):
 
     return parsed_alignments
 
-def clean_sentence(sentence):
-    if sentence == "":
-        return ""
-    parts = sentence.split('</s>')
-    unique_parts = list(dict.fromkeys(part.strip() for part in parts if part.strip()))
-    return ' </s> '.join(unique_parts) + ' </s>'
-
-def sliding_windows(sentences, window_size):
-    cleaned_windows = []
-    for i in range(len(sentences) - window_size + 1):
-        window = [clean_sentence(sentence) for sentence in sentences[i:i + window_size]]
-        unique_window = list(dict.fromkeys(window))
-        cleaned_windows.append(unique_window)
-    return cleaned_windows
-
 def standardize_common_alignments(common_alignments_list):
-    """
-    Standardizes the alignments across different alignment results to ensure consistent src alignment.
-    If src indices differ, merges mt alignments accordingly.
-
-    Args:
-        common_alignments_list (list): A list of alignment results, where each result is a list of tuples
-                                       (src_indices, mt_indices).
-
-    Returns:
-        list: A list of standardized alignment results.
-    """
     # Reference alignment for standardization (use the shortest alignment set as baseline)
     reference_alignments = min(common_alignments_list, key=lambda alignments: len(alignments))
 
@@ -932,41 +602,39 @@ def standardize_common_alignments(common_alignments_list):
                 for src in src_indices:
                     if (src,) in mt_idx_map:
                         mt_indices.extend(mt_idx_map[(src,)])
-
                 # Ensure indices are unique and sorted after merging
                 mt_indices = sorted(set(mt_indices))
-
             standardized_alignment.append((src_indices, mt_indices))
         standardized_results.append(standardized_alignment)
     return standardized_results
 
-def generate_windows(source, reference, translations, start_index):
+def generate_windows(source, translations):
     # Segment sentences
-    source_segments = segment_sentences_by_punctuation(source, lang="zh")
-    reference_segments = segment_sentences_by_punctuation(reference, lang="zh")
-    
-    if TASK_LANGUAGE == "English":
-        lang = 'en'
-    elif TASK_LANGUAGE == "Russian":
-        lang = 'ru'
-    elif TASK_LANGUAGE == "German":
-        lang = 'de'
-    
-    src_txt = f"{lang}_temp_{start_index}/mpc_src.txt"
-    mt_txt = f"{lang}_temp_{start_index}/mpc_mt.txt"
+    source_segments = segment_sentences_by_punctuation(source, lang=src_lang)   
 
+    temp_folder = f"{src_lang}_{tgt_lang}_temp"
+    os.makedirs(temp_folder, exist_ok=True)
+
+    # Generate overlaps and embeddings
+    src_txt = f"{src_lang}_{tgt_lang}_temp/mpc_src.txt"
+    mt_txt = f"{src_lang}_{tgt_lang}_temp/mpc_mt.txt"
+
+    print("\n ----------------- source segmentation --------------------------- ")
     save_sentences_to_txt(source_segments, src_txt)
+    print(" -------------------------------------------------------------------  \n")
     _, src_embed = generate_overlap_and_embedding(src_txt)
-    mt_segments_list = [segment_sentences_by_punctuation(t, lang=lang) for t in translations]
-    mt_windows_list = []
+    mt_segments_list = [segment_sentences_by_punctuation(t, lang=tgt_lang) for t in translations]
+    adjusted_mt_list = []
     
     common_alignments_list = []
     for mt_segments in mt_segments_list:
+        print("\n ----------------- translation segmentation --------------------------- ")
         save_sentences_to_txt(mt_segments, mt_txt)
+        print(" ------------------------------------------------------------------------  \n")
         _, mt_embed = generate_overlap_and_embedding(mt_txt)
         src_mt_alignments = run_vecalign_explore(src_txt, mt_txt, src_embed, mt_embed) # run_vecalign_explore, run_vecalign
         common_alignments_list.append(src_mt_alignments.copy())
-        delete_files_with_mt(f"{lang}_temp_{start_index}")
+        delete_files_with_mt(f"{src_lang}_{tgt_lang}_temp")
     
     common_alignments_list = standardize_common_alignments(common_alignments_list)
 
@@ -991,63 +659,27 @@ def generate_windows(source, reference, translations, start_index):
             adjusted_src.append(aligned_src)
             adjusted_mt.append(aligned_mt)
 
-        src_windows = sliding_windows(adjusted_src, WINDOW_SIZE)
-        mt_windows = sliding_windows(adjusted_mt, WINDOW_SIZE)
-        mt_windows_list.append(mt_windows.copy())
+        adjusted_mt_list.append(adjusted_mt.copy())
         mt_index += 1
     
-    clear_folder(f"{lang}_temp_{start_index}")
-    return src_windows, mt_windows_list
+    clear_folder(f"{src_lang}_{tgt_lang}_temp")
+    return adjusted_src, adjusted_mt_list
 
 ################################# main function #################################
 
-def set_translation_model(model_type="rm"):
+def saving_memory(buffer, index, iteration, final_translations_record):
     """
-    - "rm" -> Use Reward Model
-    - "pm" -> Use Preference Model
+    Save the buffer, and final_translations_record to the Memory folder.
     """
-    global find_best_translation, find_worst_buffer_translation, find_best_buffer_translation, predict_preference
-    
-    if model_type == "pm":
-        
-        global preference_model, tokenizer
-        pm_model_path = "preference_model_small.pth"
-        tokenizer = MT5Tokenizer.from_pretrained('google/mt5-small')
-        preference_model = load_preference_model(pm_model_path)
-
-        print("Using Preference Model for translation ranking.")
-        find_best_translation = pm_find_best_translation
-        find_worst_buffer_translation = pm_find_worst_buffer_translation
-        find_best_buffer_translation = pm_find_best_buffer_translation
-        predict_preference = pm_predict_preference
-    elif model_type == "rm":
-        
-        global reward_model
-        reward_model = RewardModel(device=device)
-
-        print("Using Reward Model for translation ranking.")
-        find_best_translation = rm_find_best_translation
-        find_worst_buffer_translation = rm_find_worst_buffer_translation
-        find_best_buffer_translation = rm_find_best_buffer_translation
-        predict_preference = rm_predict_preference
-    else:
-        raise ValueError("Invalid model type. Use 'rm' for Reward Model or 'pm' for Preference Model.")
-
-def saving_memory(buffer, index, iteration, token_record, final_translations_record):
-    """
-    Save the buffer, token_record, and final_translations_record to the Memory folder.
-    """
-    os.makedirs(f"{MEMORY_FOLDER}/{TASK_LANGUAGE}", exist_ok=True)
-
-    buffer_file_path = f"{MEMORY_FOLDER}/{TASK_LANGUAGE}/buffer_{index}_iter_{iteration}.json"
-    metadata_file_path = f"{MEMORY_FOLDER}/{TASK_LANGUAGE}/metadata_{index}_iter_{iteration}.json"
+    os.makedirs(f"{MEMORY_FOLDER}", exist_ok=True)
+    buffer_file_path = f"{MEMORY_FOLDER}/buffer_{index}_iter_{iteration}.json"
+    metadata_file_path = f"{MEMORY_FOLDER}/metadata_{index}_iter_{iteration}.json"
 
     buffer_to_save = {key: list(value) for key, value in buffer.items()}
     with open(buffer_file_path, "w", encoding="utf-8") as f:
         json.dump(buffer_to_save, f, ensure_ascii=False, indent=4)
     
     metadata = {
-        "token_record": token_record,
         "final_translations_record": final_translations_record
     }
     with open(metadata_file_path, "w", encoding="utf-8") as f:
@@ -1056,126 +688,78 @@ def saving_memory(buffer, index, iteration, token_record, final_translations_rec
     print(f"Buffer saved to {buffer_file_path}")
     print(f"Metadata saved to {metadata_file_path}")
 
-def load_memory(index, iteration):
-    """
-    Read the buffer from the Memory folder. If no record is found, return a new buffer.
-    Args:
-        index (int): The current data index being processed.
-        iteration (int): The iteration corresponding to the buffer to be read.
-    Returns:
-        buffer (defaultdict): The read buffer. If no historical record is found, an empty buffer is returned.
-    """
-    file_path = f"{MEMORY_FOLDER}/{TASK_LANGUAGE}/buffer_{index}_iter_{iteration}.json"
-    if os.path.exists(file_path):
-        with open(file_path, "r", encoding="utf-8") as f:
-            loaded_buffer = json.load(f)
-        print(f"Loaded buffer from {file_path}")
-        return defaultdict(list, {key: list(value) for key, value in loaded_buffer.items()})
-    else:
-        print(f"No previous buffer found for index {index}, iteration {iteration-1}. Starting fresh.")
-        return defaultdict(list)
-
-def plan2align_process(start_index, end_index, output_path):
+def process_chunk():
 
     data = pd.read_csv(csv_path)
-
-    if start_index >= len(data):
-        print("Starting index is out of range")
-        return
-
-    data[new_column_name + "_ann"] = ""
-    data[new_column_name + "_ref"] = ""
-
-    end_index = min(end_index, len(data))
-
     for index, row in data.iterrows():
-        
-        if index < start_index or index >= end_index:
-            continue
-        
+        print("::::::::::::::::::::::: index :::::::::::::::::::::::", index, " ::::::::::::::::::::::: index :::::::::::::::::::::::", )
         buffer = defaultdict(list)
-        
-        token_count = 0    
-        
-        source_sentence = row['zh']
-        source_segments = segment_sentences_by_punctuation(source_sentence, lang="zh")
+                
+        source_sentence = row[src_lang].replace('\n', ' ')
+        source_segments = segment_sentences_by_punctuation(source_sentence, lang=src_lang)
 
-        if TASK_LANGUAGE == "English":
-            lang = 'en'
-        elif TASK_LANGUAGE == "Russian":
-            lang = 'ru'
-        elif TASK_LANGUAGE == "German":
-            lang = 'de'
-
-        reference = row[lang]
         for iteration in range(max_iterations):
             print(f"\nStarting iteration {iteration + 1}/{max_iterations}...\n")
             
             if iteration in stop_memory:
-                final_translations_ann = final_translate_with_deepinfra_ann(source_sentence, source_segments, buffer, TASK_LANGUAGE)
-                final_translations_ref = final_translate_with_deepinfra_ref(source_sentence, source_segments, buffer, TASK_LANGUAGE)
-
-                token_count_ann = token_count + get_token_length(final_translations_ann, TASK_LANGUAGE)
-                token_count_ref = token_count + get_token_length(final_translations_ref, TASK_LANGUAGE)
-
-                token_record = [token_count_ann, token_count_ref]
-                final_translations_record = [final_translations_ann, final_translations_ref]
-                saving_memory(buffer, index, iteration, token_record, final_translations_record)
+                final_translations = final_translate_with_deepinfra(source_sentence, source_segments, buffer, SRC_LANGUAGE, TASK_LANGUAGE)
+                print("Final Translation Method:")
+                print(final_translations)
+                final_translations_record = [final_translations]
+                saving_memory(buffer, index, iteration, final_translations_record)
             
             if iteration == max_iterations - 1:
                 break
             else:
-                translations = translate_with_deepinfra(source_sentence, buffer, good_ref_contexts_num+iteration, TASK_LANGUAGE)
-                token_count += get_token_length(translations, TASK_LANGUAGE)
+                translations = translate_with_deepinfra(source_sentence, buffer, good_ref_contexts_num+iteration, SRC_LANGUAGE, TASK_LANGUAGE)
             
-            src_windows, mt_windows_list = generate_windows(source_sentence, reference, translations, start_index)
+            src_windows, mt_windows_list = generate_windows(source_sentence, translations)
 
-            # Evaluate translations and update buffer
+            ####################################### Evaluate translations and update buffer #######################################
+            print("Evaluate translations and update buffer ..............")
+
+            # First, store all sources and candidate translations as lists.
+            src_context_list = list(src_windows)
+            candidates_list = []
             for window_index in range(len(src_windows)):
-                candidates = []
-                src_context = src_windows[window_index]
+                candidates = [mt_windows[window_index] for mt_windows in mt_windows_list]
+                candidates_list.append(candidates)
+            
+            # Batch evaluate all candidate translations, returning the best translation and score for each source.
+            best_candidate_results = batch_rm_find_best_translation(list(zip(src_context_list, candidates_list)), TASK_LANGUAGE)
 
-                for mt_windows in mt_windows_list:
-                    candidates.append(mt_windows[window_index])
+            print("\n Our best candidate results:")
+            print(best_candidate_results)
+            print(" ------------------------------------------------------------------------  \n")
 
-                if ''.join(src_context) not in buffer:
-                    best_translation = find_best_translation(src_context, candidates, TASK_LANGUAGE)
-                    if best_translation != None:
-                        buffer[''.join(src_context)] = [best_translation]
-                elif len(buffer[''.join(src_context)]) < good_context_buffer_size:
-                    best_translation = find_best_translation(src_context, candidates, TASK_LANGUAGE)
-                    if best_translation != None:
-                        buffer[''.join(src_context)].append(best_translation)
-                    best_buffer_translation = find_best_buffer_translation(src_context, buffer[''.join(src_context)], TASK_LANGUAGE)
-                    if best_buffer_translation != None:
-                        buffer[''.join(src_context)].remove(best_buffer_translation)
-                        buffer[''.join(src_context)].insert(0, best_buffer_translation)
-                else:
-                    best_translation = find_best_translation(src_context, candidates, TASK_LANGUAGE)
-                    weakest_translation = find_worst_buffer_translation(src_context, buffer[''.join(src_context)], TASK_LANGUAGE)
-                    if best_translation != None and weakest_translation != None:
-                        if predict_preference(''.join(src_context), best_translation, weakest_translation, TASK_LANGUAGE) == 0:
-                            buffer[''.join(src_context)].remove(weakest_translation)
-                            buffer[''.join(src_context)].append(best_translation)
-                        best_buffer_translation = find_best_buffer_translation(src_context, buffer[''.join(src_context)], TASK_LANGUAGE)
-                        if best_buffer_translation != None:
-                            buffer[''.join(src_context)].remove(best_buffer_translation)
-                            buffer[''.join(src_context)].insert(0, best_buffer_translation)
-                    elif best_translation != None and weakest_translation == None:
-                        if buffer[''.join(src_context)]:
-                            buffer[''.join(src_context)].pop()
-                        buffer[''.join(src_context)].append(best_translation)
-                        
-        print("Final Translation by Annotation:")
-        print(final_translations_1)
-        print("Final Translation by Reference:")
-        print(final_translations_3)
+            print("\n===== Initial buffer state =====")
+            for src, translations in buffer.items():
+                print(f"Source '{src}': {[t[0] for t in translations]}")
 
-        data.at[index, new_column_name + "_ann"] = final_translations_1    
-        data.at[index, new_column_name + "_ref"] = final_translations_3
-        
-    data.iloc[start_index:end_index].to_csv(output_path, index=False)
+            # Update the buffer for each source.
+            for i, src in enumerate(src_context_list):
+                best_tuple = best_candidate_results[i]  # (translation, score)
+                if best_tuple[0] is not None:
+                    # If the source is not yet in the buffer, initialize it.
+                    if src not in buffer:
+                        buffer[src] = [best_tuple]
+                        print(f"[ADD] New Source '{src}' Add Translation: '{best_tuple[0]}', Score: {best_tuple[1]}")
+                    else:
+                        # Directly add the new translation to the buffer.
+                        buffer[src].append(best_tuple)
+                        print(f"[ADD] Source '{src}' Add Translation: '{best_tuple[0]}', Score: {best_tuple[1]}")
+                    
+                    # Sort by score to place the best translation (highest score) at the top.
+                    buffer[src].sort(key=lambda x: x[1], reverse=True)
+                    print(f"[UPDATE] Source '{src}' Best Translation: '{buffer[src][0][0]}'")
+
+            print("\n===== Final buffer state =====")
+            for src, translations in buffer.items():
+                print(f"Source '{src}': {[t[0] for t in translations]}")
+
+
+        print("Final Translation:")
+        print(final_translations)
 
 if __name__ == "__main__":
-    set_translation_model("pm") 
-    plan2align_process(START_INDEX, ENDED_INDEX, output_path)
+    process_chunk()
