@@ -15,10 +15,11 @@ conda create --name plan2align python=3.9
 conda activate plan2align
 ```
 
-### 2. Install VecAlign
+### 2. Install Dependencies: VecAlign & SpaCy
 
-Plan2Align relies on VecAlign for alignment tasks. Please follow the installation instructions provided in the official repository:  
-[VecAlign GitHub Repository](https://github.com/thompsonb/vecalign)
+Plan2Align relies on **VecAlign** for alignment tasks. Follow the installation instructions in the [VecAlign GitHub Repository](https://github.com/thompsonb/vecalign).
+
+Text segmentation is handled by **SpaCy**. Please refer to the [spaCy Installation Guide](https://spacy.io/usage) for installing the relevant language models. You can update the supported translation languages via the `lang_map` dictionary in `plan2align.py` (Line 81).
 
 ### 3. Configure Environment Variables for LASER
 
@@ -32,18 +33,18 @@ source ~/.bashrc
 
 Make sure to replace `{PATH_TO_LASER}` with the actual path where LASER is installed.
 
-### 4. Prepare API Key
+### 4. Set Up API Keys for OpenAI Services
 
-Plan2Align requires an API key for OpenAI services. Ensure that you have the necessary credentials set up:
+Plan2Align uses an API key to access OpenAI services. Configure your credentials as follows:
 
 ```python
 openai = OpenAI(
     api_key='your-api-key',
-    base_url='your-base_url',
+    base_url='your-base_url'
 )
 ```
 
-Replace `'your-api-key'` and `'your-base_url'` with your actual API key and endpoint.
+Replace `'your-api-key'` and `'your-base_url'` with your actual credentials. Alternatively, you may opt for a locally deployed language model if available.
 
 ### 5. Configure Reward Model
 
@@ -60,34 +61,50 @@ value_head_weights = load_file("../<path-to-value_head>")
 
 Replace `<path-to-rm>` and `<path-to-value_head>` with the correct file paths in your system.
 
-Before running the program, you can use `set_translation_model("rm")` to make Plan2Align perform alignment based on the reward model.
-
 ### 6. Running Plan2Align
 
-For ease of testing Plan2Align, we provide a small preference model for alignment. You can download its weights from the following link:  
-[Download Weights](https://drive.google.com/file/d/1us3pBmnJseI0-lozh999dDraql9m03im/view?usp=sharing).  
-Place it directly in the project directory, and use `set_translation_model("pm")` in `plan2align.py` to utilize it.
+For testing, an alternative metric—**MetricX-QE**—is available to replace the reward model.
 
-Regarding datasets, we used the dataset from [Hugging Face](https://huggingface.co/datasets/huckiyang/zh-tw-en-us-nv-tech-blog-v1) for validation. We selected longer, semantically structured samples from it, created a `valid_en.csv`, and performed Chinese-to-English translation tasks.
-
-To validate that Plan2Align is correctly installed and configured, execute the following command:
+Plan2Align accepts a CSV file as input with each column designated by a language code (e.g., `zh`, `en`). Specify source and target languages via command-line arguments. For example, to perform a Chinese-to-English translation task using `valid_en_ja.csv`, execute:
 
 ```bash
 python plan2align.py \
-    --task_language English \
-    --dataset "valid_en.csv" \
-    --start_index 0 \
-    --end_index 5 \
-    --cuda_num 0 \
-    --threshold 2 \
+    --input_file "valid_en_ja.csv" \
+    --rm "metricx" \
+    --src_language English \
+    --task_language Japanese \
+    --threshold 0.7 \
     --max_iterations 6 \
     --good_ref_contexts_num 5 \
-    --good_context_buffer_size 3 \
-    --memory_folder "memory" \
-    --output_suffix "t_2_d_6_chunk_0_5"
+    --cuda_num 0
 ```
 
-If the script runs successfully, the installation is complete.
+Results from each iteration and final outputs will be saved in a folder named after the input file (e.g., `valid_en_ja`).
+
+### 7. Evaluation Process
+
+Translation results from each iteration are stored in separate folders. To merge results from a specific iteration into a single CSV file, use the following command. For example, to merge iteration 5 results into `valid_en_ja.csv` with the output column named `plan2align`:
+
+```bash
+python memory2csv.py \
+    --num 5 \
+    --input_csv valid_en_ja.csv  \
+    --output_csv eval_en_ja.csv \
+    --column_name plan2align
+```
+
+Then, evaluate the `plan2align` column with:
+
+```bash
+python long_context_eval.py \
+    --file valid_en_ja.csv \
+    --target_column plan2align \
+    --save eval_en_ja \
+    --src_language English \
+    --task_language Japanese
+```
+
+The evaluation scores will be saved in the `eval_en_ja` folder as `evaluated_results_plan2align.csv`.
 
 ---
 
