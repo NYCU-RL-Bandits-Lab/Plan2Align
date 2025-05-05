@@ -18,11 +18,9 @@ def augment_pref_data(
         chosen_text = str(row['chosen']).strip()
         reject_text = str(row['rejected']).strip()
 
-        # 如果整段是空，就跳過這筆
         if not chosen_text or not reject_text:
             continue
 
-        # 切句
         chosen_sents = [sent.text.strip()
                         for sent in nlp(chosen_text).sents
                         if sent.text.strip()]
@@ -30,13 +28,11 @@ def augment_pref_data(
                         for sent in nlp(reject_text).sents
                         if sent.text.strip()]
 
-        # 如果切不出任何句子，就把全段當作一個句子
         if not chosen_sents:
             chosen_sents = [chosen_text]
         if not reject_sents:
             reject_sents = [reject_text]
 
-        # 抽樣（可重複）
         chosen_samples = (random.sample(chosen_sents, n_samples)
                           if len(chosen_sents) >= n_samples
                           else random.choices(chosen_sents, k=n_samples))
@@ -44,7 +40,6 @@ def augment_pref_data(
                           if len(reject_sents) >= n_samples
                           else random.choices(reject_sents, k=n_samples))
 
-        # 生成增強資料
         for c_sent, r_sent in zip(chosen_samples, reject_samples):
             augmented.append({
                 'prompt': prompt,
@@ -55,7 +50,7 @@ def augment_pref_data(
     aug_df = pd.DataFrame(augmented)
     aug_df = aug_df.drop_duplicates(subset=['prompt', 'chosen', 'rejected'])
     aug_df.to_csv(output_csv, index=False)
-    print(f"完成增強，總筆數：{len(aug_df)}，已儲存到 {output_csv}")
+    print(f"Total：{len(aug_df)}，Saved to {output_csv}")
 
 if __name__ == "__main__":
     augment_pref_data(

@@ -585,20 +585,20 @@ if __name__ == '__main__':
 
 
 """
-# Raw：
+# Raw
 python plan2align_hh.py --input_file hhrlhf.csv --output_folder raw --method raw
 
-# Best-of-N：
-python plan2align_hh.py --input_file hhrlhf.csv --output_folder bfn --method best_of_n --rm_path "/home/raychen/20241202/model_trained/nips_rm_hhrlhf_args"
+# Best-of-N
+python plan2align_hh.py --input_file hhrlhf.csv --output_folder bfn --method best_of_n --rm_path "../model_trained/nips_rm_hhrlhf_args"
 
-# MPC-style：
-python plan2align_hh.py --input_file hhrlhf.csv --output_folder mpc --method mpc --rm_path "/home/raychen/20241202/model_trained/nips_rm_hhrlhf_args"
+# MPC-style
+python plan2align_hh.py --input_file hhrlhf.csv --output_folder mpc --method mpc --rm_path "../model_trained/nips_rm_hhrlhf_args"
 
-# Plan2Align (sentence-level or response-level)：
-python plan2align_hh.py --input_file hhrlhf.csv --output_folder new_p2a --method p2a --rm_path "/home/raychen/20241202/model_trained/nips_rm_hhrlhf"
+# Plan2Align (select)
+python plan2align_hh.py --input_file hhrlhf.csv --output_folder new_p2a --method p2a --rm_path "../model_trained/nips_rm_hhrlhf"
 
-# Plan2Align (drop version)：
-python plan2align_hh.py --input_file hhrlhf.csv --output_folder drop_p2a --method drop_p2a --rm_path "/home/raychen/20241202/model_trained/nips_rm_hhrlhf_args"
+# Plan2Align (drop)
+python plan2align_hh.py --input_file hhrlhf.csv --output_folder drop_p2a --method drop_p2a --rm_path "../model_trained/nips_rm_hhrlhf_args"
 
 # evaluation 
 python plan2align_hh.py --evaluate --eval_it 5 --eval_output_file p2a.csv
