@@ -6,3 +6,9 @@ __pycache__/
 *~
 .pytest_cache/
 venv/
+drop_p2a/
+mpc/
+new_p2a/
+p2a/
+mpc_drop_p2a/
+hhrlhf_*
