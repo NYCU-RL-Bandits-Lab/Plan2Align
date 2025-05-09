@@ -159,7 +159,6 @@ def run_mpc_generation(args):
 def run_p2a_generation(args):
     """
     P2A generation with a fixed-size buffer of top responses:
-    - No planning stage.
     - Maintain a buffer (size=3) of the highest-scoring responses seen so far.
     - On each iteration, let the LLM see the buffer and their scores (with threshold guidance).
     - For each persona, ask for a full revised response based on the buffer and threshold guidance.
@@ -187,7 +186,7 @@ def run_p2a_generation(args):
     gen_model.eval()
 
     # Score threshold guidance
-    threshold = 3.5
+    threshold = args.threshold
     threshold_note = (
         f"Score guidance: responses scoring >= {threshold} are considered good; "
         f"those below {threshold} are considered poor. Avoid using directions from "
@@ -307,7 +306,7 @@ def evaluate_results(folder_path: str, it: int, output_file: str, max_index: int
     # Evaluation of best responses up to iteration it
     device = f'cuda:{cuda_num}' if torch.cuda.is_available() else 'cpu'
     device = f'cuda:{cuda_num}'
-    path = "nicolinho/QRM-Llama3.1-8B-v2" # "argsearch/llama-7b-rm-float32", "Skywork/Skywork-Reward-Llama-3.1-8B-v0.2", "nicolinho/QRM-Llama3.1-8B-v2" "OpenAssistant/reward-model-deberta-v3-large-v2"
+    path = "nicolinho/QRM-Llama3.1-8B-v2"
     rm_model = AutoModelForSequenceClassification.from_pretrained(path, torch_dtype=torch.bfloat16, device_map=device, trust_remote_code=True)
     rm_tokenizer = AutoTokenizer.from_pretrained(path, use_fast=True)
     records = []
@@ -353,9 +352,9 @@ if __name__ == '__main__':
     parser.add_argument("--max_iterations", type=int, default=5, help="Total iterations")
     parser.add_argument("--cuda_num", type=int, default=0, help="CUDA device index")
     parser.add_argument("--method", type=str,
-                        choices=['p2a','mpc'], default='plan2align',
+                        choices=['p2a','mpc'], default='p2a',
                         help="Generation method to run")
-    parser.add_argument("--rm_path", type=str, default="/home/raychen/20241202/model_trained/nips_rm_hhrlhf_args", help="reward model folder path")
+    parser.add_argument("--rm_path", type=str, help="reward model folder path")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation only")
     parser.add_argument("--eval_input_folder", type=str, help="evaluation folder name")
     parser.add_argument("--eval_it", type=int, default=5, help="Max iteration to eval")
@@ -371,14 +370,3 @@ if __name__ == '__main__':
             run_p2a_generation(args)
         elif args.method=='mpc':
             run_mpc_generation(args)
-
-"""
-# Vanilla MPC
-python plan2align_hh.py --input_file hhrlhf.csv --output_folder v-mpc --method mpc --cuda_num 1
-
-# Plan2Align
-python plan2align_hh.py --input_file hhrlhf.csv --output_folder p2a --method p2a --cuda_num 2
-
-# evaluation 
-python plan2align_hh.py --evaluate --eval_input_folder p2a --eval_it 5 --eval_range 400 --eval_cuda_num 0
-"""
