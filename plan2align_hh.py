@@ -1,6 +1,7 @@
 import os
 import glob
 import json
+import random
 import argparse
 import pandas as pd
 import spacy
@@ -75,10 +76,11 @@ def ensure_conv(prompt):
 
 def generate_local(gen_model, gen_tokenizer, device, sys_prompt, user_prompt,
                    max_new_tokens=1024, temperature=0.7, top_p=0.9):
-    chat = [
-        {"role": "system", "content": sys_prompt},
-        {"role": "user", "content": user_prompt}
-    ]
+    chat = []
+    if sys_prompt or sys_prompt != "":
+        chat.append({"role": "system", "content": sys_prompt})
+    chat.append({"role": "user", "content": user_prompt})
+
     inputs = gen_tokenizer.apply_chat_template(
         chat,
         return_tensors="pt",
@@ -105,66 +107,8 @@ def generate_local(gen_model, gen_tokenizer, device, sys_prompt, user_prompt,
         text = text[len("assistant"):].lstrip()
     return text
 
-def run_mpc_generation(args):
-    """Iterative MPC-style without buffer: refine best response each iter."""
-    device = f"cuda:{args.cuda_num}" if torch.cuda.is_available() else "cpu"
-    # Reward model
-    rm_path = args.rm_path
-    rm_model, rm_tokenizer = load_reward_model_and_tokenizer(rm_path, {"": device}, device)
-
-    gen_model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
-    gen_tokenizer = AutoTokenizer.from_pretrained(gen_model_name)
-    if gen_tokenizer.pad_token is None:
-        gen_tokenizer.pad_token = gen_tokenizer.eos_token
-    gen_model = AutoModelForCausalLM.from_pretrained(
-        gen_model_name,
-        torch_dtype=torch.bfloat16,
-        device_map={"":device},
-        trust_remote_code=True
-    ).to(device);
-    gen_model.eval()
-    df = pd.read_csv(args.input_file)
-    os.makedirs(args.output_folder, exist_ok=True)
-    def generate_refined_mpc(prompt, last_resp):
-        base = ensure_conv(prompt)
-        base += f"\n\n# Previous best:\n{last_resp}"
-        sys_ps = [
-            "You are an Accuracy Checker. Given the previous best response, revise it to correct any factual or logical errors and improve its accuracy. Output only the improved response.",
-            "You are a Safety Auditor. Given the previous best response, revise it to remove biased or unsafe content, and ensure it is neutral and respectful. Output only the improved response.",
-            "You are a Helpfulness Enhancer. Given the previous best response, revise it to add helpful examples, clarify explanations, and increase its usefulness. Output only the improved response."
-        ]
-
-        return [generate_local(gen_model, gen_tokenizer, device, sp, base) for sp in sys_ps]
-    
-    for idx, row in df.iterrows():
-        prompt = row['prompt']
-        # initial raw
-        sys_p = "You are a helpful assistant. Output only the response."
-        base = ensure_conv(prompt)
-        best_resp = generate_local(gen_model, gen_tokenizer, device, sys_p, base)
-        best_score = score_response(prompt, best_resp, rm_model, rm_tokenizer, device)
-        history = {0: {'prompt': prompt, 'response': best_resp, 'score': best_score}}
-        for it in range(1, args.max_iterations + 1):
-            candidates = generate_refined_mpc(prompt, best_resp)
-            scored_candidates = [
-                (cand, score_response(prompt, cand, rm_model, rm_tokenizer, device))
-                for cand in candidates
-            ]
-            best_resp, best_score = max(scored_candidates, key=lambda x: x[1])
-            history[it] = {'prompt': prompt, 'response': best_resp, 'score': best_score}
-        with open(f"{args.output_folder}/prompt_{idx}.json", 'w', encoding='utf-8') as f:
-            json.dump(history, f, ensure_ascii=False, indent=2)
-    print("MPC-style generation done.")
-
-def run_p2a_generation(args):
-    """
-    P2A generation with a fixed-size buffer of top responses:
-    - Maintain a buffer (size=3) of the highest-scoring responses seen so far.
-    - On each iteration, let the LLM see the buffer and their scores (with threshold guidance).
-    - For each persona, ask for a full revised response based on the buffer and threshold guidance.
-    - Update the buffer with new candidates, keeping only the top 3.
-    - Always update to the best current candidate (avoid local optima).
-    """
+def run_mpc_p2a_generation(args):
+    """Run both MPC-style and buffer-based P2A-style iterative refinement using a shared initial response."""
     device = f"cuda:{args.cuda_num}" if torch.cuda.is_available() else "cpu"
 
     # Load reward model
@@ -173,142 +117,162 @@ def run_p2a_generation(args):
     )
 
     # Load generation model
-    gen_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
-    gen_tokenizer = AutoTokenizer.from_pretrained(gen_name)
+    gen_model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+    gen_tokenizer = AutoTokenizer.from_pretrained(gen_model_name)
     if gen_tokenizer.pad_token is None:
         gen_tokenizer.pad_token = gen_tokenizer.eos_token
     gen_model = AutoModelForCausalLM.from_pretrained(
-        gen_name,
+        gen_model_name,
         torch_dtype=torch.bfloat16,
         device_map={"": device},
         trust_remote_code=True
     ).to(device)
     gen_model.eval()
 
-    # Score threshold guidance
     threshold = args.threshold
-    threshold_note = (
-        f"Score guidance: responses scoring >= {threshold} are considered good; "
-        f"those below {threshold} are considered poor. Avoid using directions from "
-        f"low-scoring responses (< {threshold}) as primary improvement targets."
-    )
 
-    # Persona definitions with reward-maximization emphasis
     personas = [
-        (
-            "Accuracy Checker",
-            "You are an Accuracy Checker whose goal is to maximize the reward score. "
-            + threshold_note
-            + " Given top responses and their scores, rewrite to fix factual or logical errors and improve accuracy, focusing on changes that will increase the response's reward score. Output only the revised response."
-        ),
-        (
-            "Safety Auditor",
-            "You are a Safety Auditor whose goal is to maximize the reward score. "
-            + threshold_note
-            + " Given top responses and their scores, rewrite to remove biased or unsafe content, ensure neutrality, and increase the response's reward score. Output only the revised response."
-        ),
-        (
-            "Helpfulness Enhancer",
-            "You are a Helpfulness Enhancer whose goal is to maximize the reward score. "
-            + threshold_note
-            + " Given top responses and their scores, rewrite to add examples, clarify explanations, increase usefulness, and maximize the response's reward score. Output only the revised response."
-        ),
+        {
+            "mpc": "Improve the given response. Make it more concise and clear. Respond only with the improved answer.",
+            "p2a": "Rewrite the following partial responses as a single improved answer that is more concise and clear. "
+        },
+        {
+            "mpc": "Improve the given response. Make it more detailed and informative. Respond only with the improved answer.",
+            "p2a": "Rewrite the following partial responses as a single improved answer that is more detailed and informative. "
+        },
+        {
+            "mpc": "Improve the given response. Make it balanced and well-structured. Respond only with the improved answer.",
+            "p2a": "Rewrite the following partial responses as a single improved answer that is more balanced and well-structured. "
+        }
     ]
 
-    # Prepare I/O
+    def generate_mpc_candidates(prompt, last_resp):
+        base = ensure_conv(prompt)
+        base += f"\n\n# Previous best:\n{last_resp}"
+        return [
+            generate_local(gen_model, gen_tokenizer, device, persona["mpc"], base)
+            for persona in personas
+        ]
+
+    nlp = spacy.load("en_core_web_sm")
+    def split_sentences(text):
+        doc = nlp(text)
+        return [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+
+    def generate_p2a_candidates(prompt, buffer, buffer_size):
+        num_candidates = len(buffer)
+        all_segments = []
+        all_scores = []
+        for i, item in enumerate(buffer):
+            sentences = split_sentences(item['response'])
+            total_sentences = len(sentences)
+            segment_size = total_sentences // buffer_size
+            remainder = total_sentences % buffer_size
+            segments = []
+            start = 0
+            for j in range(buffer_size):
+                end = start + segment_size + (1 if j < remainder else 0)
+                segments.append(sentences[start:end])
+                start = end
+            all_segments.append(segments)
+            all_scores.append(item['score'])
+            
+        chosen_segments = [[] for _ in range(buffer_size)]
+        candidate_indices = list(range(num_candidates))
+        used_candidates = [False] * num_candidates
+        for i in range(buffer_size):
+            random.shuffle(candidate_indices)
+            segment_filled = False
+            for candidate_idx in candidate_indices:
+                if not used_candidates[candidate_idx]:
+                    if all_segments[candidate_idx][i] and all_scores[candidate_idx] >= threshold:
+                        chosen_segments[i].extend(all_segments[candidate_idx][i])
+                        used_candidates[candidate_idx] = True
+                        segment_filled = True
+                        break
+            if not segment_filled:
+                chosen_segments[i].append("<Complete it>")
+
+        buffer_lines = []
+        combined_response = "\n".join(["\n".join(seg) for seg in chosen_segments])
+        snippet = combined_response.replace("\n", " ")
+        buffer_lines.append(f"(mixed, based on {sum(used_candidates)}/{num_candidates} candidates) {snippet}")
+        context = ensure_conv(prompt)
+        context += "\n\nPartial responses:\n" + "\n".join(buffer_lines) 
+        print(context)
+        return [
+            generate_local(gen_model, gen_tokenizer, device, persona["p2a"], context)
+            for persona in personas
+        ]
+
     df = pd.read_csv(args.input_file)
     os.makedirs(args.output_folder, exist_ok=True)
 
     for idx, row in df.iterrows():
-        prompt = row["prompt"]
-        conv = ensure_conv(prompt)
+        if idx < args.start or idx >= args.end:
+            continue
+        
+        prompt = row['prompt']
+        sys_p = ""
+        base_conv = ensure_conv(prompt)
+        initial_resp = generate_local(gen_model, gen_tokenizer, device, sys_p, base_conv)
+        initial_score = score_response(prompt, initial_resp, rm_model, rm_tokenizer, device)
 
-        # 1) Initial generation
-        init_sys = "You are a helpful assistant. Output only the response."
-        response = generate_local(gen_model, gen_tokenizer, device, init_sys, conv)
-        best_score = score_response(prompt, response, rm_model, rm_tokenizer, device)
+        mpc_best_resp = p2a_best_resp = initial_resp
+        mpc_best_score = p2a_best_score = initial_score
 
-        # Initialize buffer with the first response
-        buffer = [{"response": response, "score": best_score}]
+        p2a_buffer = [{"response": initial_resp, "score": initial_score}]
 
-        # History: iteration -> { ... }
-        history = {0: {"prompt": prompt, "response": response, "score": best_score}}
+        history = {
+            0: {
+                "prompt": prompt,
+                'mpc_response': initial_resp,
+                'mpc_score': initial_score,
+                'p2a_response': initial_resp,
+                'p2a_score': initial_score
+            }
+        }
 
-        # 2) Iterative refinement with buffer
         for it in range(1, args.max_iterations + 1):
-            # Build buffer context string
-            buffer_lines = []
-            for i, entry in enumerate(buffer):
-                resp_clean = entry['response'].replace("\n", " ")
-                buffer_lines.append(f"{i}: (score={entry['score']:.4f}) {resp_clean}")
-            buffer_context = "\n".join(buffer_lines)
+            if it != 1:
+                mpc_cands = generate_mpc_candidates(prompt, mpc_best_resp)
+                mpc_scored = [(cand, score_response(prompt, cand, rm_model, rm_tokenizer, device))
+                            for cand in mpc_cands]
+                mpc_best_resp, mpc_best_score = max(mpc_scored, key=lambda x: x[1])
 
-            candidates = []
-            # Generate candidate revisions per persona
-            for persona_name, persona_sys in personas:
-                full_context = (
-                    conv
-                    + "\n\n" + threshold_note
-                    + "\n\nTop responses and scores:\n"
-                    + buffer_context
-                    + f"\n\nPlease provide a fully revised response (persona: {persona_name}):"
-                )
-                revised = generate_local(
-                    gen_model,
-                    gen_tokenizer,
-                    device,
-                    persona_sys,
-                    full_context
-                )
-                score = score_response(prompt, revised, rm_model, rm_tokenizer, device)
-                candidates.append({
-                    "persona": persona_name,
-                    "response": revised,
-                    "score": score
-                })
+                # P2A with buffer-based completion
+                p2a_cands = generate_p2a_candidates(prompt, p2a_buffer, args.buffer_size)
+                p2a_scored = [(cand, score_response(prompt, cand, rm_model, rm_tokenizer, device))
+                            for cand in p2a_cands]
+                top_cand, top_score = max(p2a_scored, key=lambda x: x[1])
+                p2a_best_resp, p2a_best_score = top_cand, top_score
+            elif it == 1:
+                mpc_cands = generate_mpc_candidates(prompt, mpc_best_resp)
+                mpc_scored = [(cand, score_response(prompt, cand, rm_model, rm_tokenizer, device))
+                            for cand in mpc_cands]
+                mpc_best_resp, mpc_best_score = max(mpc_scored, key=lambda x: x[1])
+                top_cand, top_score = mpc_best_resp, mpc_best_score
+                p2a_best_resp, p2a_best_score = top_cand, top_score
+                 
+            # Update buffer
+            p2a_buffer.append({"response": top_cand, "score": top_score})
+            p2a_buffer = sorted(p2a_buffer, key=lambda x: x['score'], reverse=True)[:args.buffer_size]
 
-            # Update buffer with new candidates
-            for cand in candidates:
-                buffer.append({"response": cand['response'], "score": cand['score']})
-            # Keep top 3 by score
-            buffer = sorted(buffer, key=lambda x: x['score'], reverse=True)[:3]
-
-            # Select best candidate to update
-            best_cand = buffer[0]
-            response = best_cand['response']
-            best_score = best_cand['score']
-
-            # Record iteration
             history[it] = {
                 "prompt": prompt,
-                "response": response,
-                "score": best_score,
-                "buffer": buffer.copy(),
-                "candidates": candidates
+                'mpc_response': mpc_best_resp,
+                'mpc_score': mpc_best_score,
+                'p2a_response': p2a_best_resp,
+                'p2a_score': p2a_best_score
             }
 
-        # 3) Save full history
         out_path = os.path.join(args.output_folder, f"prompt_{idx}.json")
-        with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(history, f, indent=2, ensure_ascii=False)
+        with open(out_path, 'w', encoding='utf-8') as f:
+            json.dump(history, f, ensure_ascii=False, indent=2)
 
-    print("P2A-style generation done.")
+    print("Combined MPC and buffer-based P2A generation done.")
 
-def eval_reward_fn(prompt, response, model, tokenizer, device):
-    messages = [{"role": "user", "content": prompt}, {"role": "assistant", "content": response}]
-    input_ids = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
-    with torch.no_grad():
-        outputs = model(input_ids)
-        reward = outputs.logits.squeeze(-1).item()
-    return reward
-
-def evaluate_results(folder_path: str, it: int, output_file: str, max_index: int, cuda_num: int):
-    # Evaluation of best responses up to iteration it
-    device = f'cuda:{cuda_num}' if torch.cuda.is_available() else 'cpu'
-    device = f'cuda:{cuda_num}'
-    path = "nicolinho/QRM-Llama3.1-8B-v2"
-    rm_model = AutoModelForSequenceClassification.from_pretrained(path, torch_dtype=torch.bfloat16, device_map=device, trust_remote_code=True)
-    rm_tokenizer = AutoTokenizer.from_pretrained(path, use_fast=True)
+def evaluate_results(folder_path: str, it: int, output_file: str, max_index: int):
     records = []
     for i in trange(max_index):
         file_name = f'prompt_{i}.json'
@@ -317,43 +281,46 @@ def evaluate_results(folder_path: str, it: int, output_file: str, max_index: int
             continue
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        valid = {int(k): v for k, v in data.items() if int(k) == it}
-        
+        valid = {int(k): v for k, v in data.items() if int(k) <= it}
         if not valid:
             continue
-        best_it = max(valid, key=lambda x: valid[x]['score'])
-        best = valid[best_it]
-        prompt = best['prompt']
-        response = best['response']
-        rm_score = best['score']
-        eval_score = eval_reward_fn(prompt, response, rm_model, rm_tokenizer, device)
+        best_it_mpc = max(valid, key=lambda x: valid[x]['mpc_score'])
+        best_it_p2a = max(valid, key=lambda x: valid[x]['p2a_score'])
+        best_mpc = valid[best_it_mpc]
+        best_p2a = valid[best_it_p2a]
+
+        prompt = best_mpc['prompt']
+        mpc_response = best_mpc['mpc_response']
+        p2a_response = best_p2a['p2a_response']
+        mpc_score = best_mpc['mpc_score']
+        p2a_score = best_p2a['p2a_score']
         records.append({
             'file': file_name,
             'prompt': prompt,
-            'best_iteration': best_it,
-            'rm_score': rm_score,
-            'eval_score': eval_score,
-            'response': response,
-            folder_path: response
+            'best_iteration_mpc': best_it_mpc,
+            'best_iteration_p2a': best_it_p2a,
+            'mpc_score': mpc_score,
+            'p2a_score': p2a_score,
+            'mpc_response': mpc_response,
+            'p2a_response': p2a_response
         })
-
     df = pd.DataFrame(records)
     df.to_csv(output_file, index=False)
-    avg_rm_score = df['old_score'].mean() if not df.empty else 0
-    avg_eval_score = df['new_score'].mean() if not df.empty else 0
-    print(f"Evaluation complete.\nAverage rm_score: {avg_rm_score:.4f}")
-    print(f"Evaluation complete.\nAverage eval_score: {avg_eval_score:.4f}")
+    mpc_avg_score = df['mpc_score'].mean() if not df.empty else 0
+    p2a_avg_score = df['p2a_score'].mean() if not df.empty else 0
+    print(f"Evaluation complete.\nAverage mpc_score: {mpc_avg_score:.4f}")
+    print(f"Evaluation complete.\nAverage p2a_score: {p2a_avg_score:.4f}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Multiple MPC Generation Methods & Evaluation")
     parser.add_argument("--input_file", type=str, help="CSV with 'prompt' column")
     parser.add_argument("--output_folder", type=str, help="generation output name")
-    parser.add_argument("--threshold", type=float, default=0.119, help="Reward threshold (for buffer method)")
-    parser.add_argument("--max_iterations", type=int, default=5, help="Total iterations")
+    parser.add_argument("--threshold", type=float, default=4, help="Reward threshold (for buffer method)")
+    parser.add_argument("--max_iterations", type=int, default=3, help="Total iterations")
+    parser.add_argument("--buffer_size", type=int, default=3, help="Top n response in buffer")
     parser.add_argument("--cuda_num", type=int, default=0, help="CUDA device index")
-    parser.add_argument("--method", type=str,
-                        choices=['p2a','mpc'], default='p2a',
-                        help="Generation method to run")
+    parser.add_argument("--start", type=int, default=0, help="start index")
+    parser.add_argument("--end", type=int, default=1024, help="end index")
     parser.add_argument("--rm_path", type=str, help="reward model folder path")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation only")
     parser.add_argument("--eval_input_folder", type=str, help="evaluation folder name")
@@ -366,7 +333,4 @@ if __name__ == '__main__':
     if args.evaluate:
         evaluate_results(args.eval_input_folder, args.eval_it, args.eval_output_file, args.eval_range, args.eval_cuda_num)
     else:
-        if args.method=='p2a':
-            run_p2a_generation(args)
-        elif args.method=='mpc':
-            run_mpc_generation(args)
+        run_mpc_p2a_generation(args)
