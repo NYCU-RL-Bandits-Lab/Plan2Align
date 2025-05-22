@@ -322,7 +322,7 @@ if __name__ == '__main__':
     parser.add_argument("--cuda_num", type=int, default=0, help="CUDA device index")
     parser.add_argument("--start", type=int, default=0, help="start index")
     parser.add_argument("--end", type=int, default=1024, help="end index")
-    parser.add_argument("--rm_path", type=str, help="reward model path(hugginface)")
+    parser.add_argument("--rm_path", type=str, default='', help="reward model path")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation only")
     parser.add_argument("--eval_input_folder", type=str, help="evaluation folder name")
     parser.add_argument("--eval_it", type=int, default=5, help="Max iteration to eval")

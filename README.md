@@ -50,16 +50,16 @@ Replace `'your-api-key'` and `'your-base_url'` with your actual credentials. Alt
 
 Plan2Align utilizes a reward model for alignment tasks. Ensure that you modify the following paths in your reward model setup before use:
 
+For HH_RLHF task: Set args.rm_path to our huggingface repository.
+
+For Translation task: Set args.rm to our huggingface repository.
 ```python
-self.RM = AutoModelForCausalLMWithValueHead.from_pretrained(
-    '../<path-to-rm>',
-    torch_dtype=torch.bfloat16
-).to(self.device)
+# for HH_RLHF
+parser.add_argument("--rm_path", type=str, default='', help="reward model path")
 
-value_head_weights = load_file("../<path-to-value_head>")
+# for Translation
+parser.add_argument("--rm_path", type=str, default='', help="reward model path")
 ```
-
-Replace `<path-to-rm>` and `<path-to-value_head>` with the correct file paths in your system.
 
 ### 6. Running Plan2Align
 
