@@ -58,7 +58,7 @@ For Translation task: Set args.rm to our huggingface repository.
 parser.add_argument("--rm_path", type=str, default='', help="reward model path")
 
 # for Translation
-parser.add_argument("--rm_path", type=str, default='', help="reward model path")
+parser.add_argument("--rm", type=str, default='metricx', help="Set the rm.")
 ```
 
 ### 6. Running Plan2Align
