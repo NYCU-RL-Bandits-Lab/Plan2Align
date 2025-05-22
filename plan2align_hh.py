@@ -14,7 +14,7 @@ from trl import AutoModelForCausalLMWithValueHead
 from safetensors.torch import load_file
 from tqdm import trange
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
+from huggingface_hub import hf_hub_download
 
 def load_reward_model_and_tokenizer(rm_path, device_map, device):
     # Load reward model with value head
@@ -25,7 +25,8 @@ def load_reward_model_and_tokenizer(rm_path, device_map, device):
         trust_remote_code=True,
     )
     # Load value head weights
-    v_weights = load_file(os.path.join(rm_path, "value_head.safetensors"))
+    value_head_file = hf_hub_download(repo_id=rm_path, filename="value_head.safetensors")
+    v_weights = load_file(value_head_file)
     new_state_dict = {}
     for key, value in v_weights.items():
         if key.startswith("v_head."):
@@ -321,7 +322,7 @@ if __name__ == '__main__':
     parser.add_argument("--cuda_num", type=int, default=0, help="CUDA device index")
     parser.add_argument("--start", type=int, default=0, help="start index")
     parser.add_argument("--end", type=int, default=1024, help="end index")
-    parser.add_argument("--rm_path", type=str, help="reward model folder path")
+    parser.add_argument("--rm_path", type=str, help="reward model path(hugginface)")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation only")
     parser.add_argument("--eval_input_folder", type=str, help="evaluation folder name")
     parser.add_argument("--eval_it", type=int, default=5, help="Max iteration to eval")

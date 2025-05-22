@@ -16,6 +16,7 @@ from transformers import AutoTokenizer
 from trl import AutoModelForCausalLMWithValueHead
 import logging
 import argparse
+from huggingface_hub import hf_hub_download
 
 """
 ## Dataset Requirements
@@ -50,7 +51,7 @@ python plan2align.py \
 # Argument parser
 parser = argparse.ArgumentParser(description="Set global variables from terminal.")
 parser.add_argument("--input_file", type=str, help="Set the input file for the translation task.")
-parser.add_argument("--rm", type=str, choices=['llama','metricx'], default='xcomet', help="Set the rm.")
+parser.add_argument("--rm", type=str, default='metricx', help="Set the rm.")
 parser.add_argument("--src_language", type=str, default="Japanese", help="Set the language for the task.")
 parser.add_argument("--task_language", type=str, default="English", help="Set the language for the task.")
 parser.add_argument("--threshold", type=float, default=0.7, help="Set the threshold value.")
@@ -180,15 +181,16 @@ class RewardModel:
         self.tokenizer = AutoTokenizer.from_pretrained(self.LLM)
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
-        
+        self.rm_path = args.rm
         self.RM = AutoModelForCausalLMWithValueHead.from_pretrained(
-            '../model_trained/rm',
+            self.rm_path,
             torch_dtype=torch_dtype
         ).to(self.device)
         self.RM.eval()
         self.RM.gradient_checkpointing_enable()
-        
-        value_head_weights = load_file("../LLaMA-Factory/saves/Llama-3.1-8B-Instruct/lora/acl_rm/value_head.safetensors")
+
+        value_head_file = hf_hub_download(repo_id=self.rm_path, filename="value_head.safetensors")
+        value_head_weights = load_file(value_head_file)
         new_state_dict = {
             key.replace("v_head.", "") if key.startswith("v_head.") else key: value 
             for key, value in value_head_weights.items()
@@ -255,11 +257,10 @@ class RewardModel:
             logging.error(f"Error in reward_fn: {str(e)}")
             raise
 
-    
-if args.rm=='llama':
-    reward_model = llama_RewardModel(device=device)
-elif args.rm=='metricx':
+if args.rm=='metricx':
     reward_model = metricx_RewardModel(device=device)
+else:
+    reward_model = RewardModel(device=device)
 
 def batch_rm_find_best_translation(evals, language):
     """
